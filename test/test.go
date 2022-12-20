@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -72,6 +73,6 @@ func runServer(srv *handler.Server, port string) {
 	http.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
 	http.Handle("/graphql", srv)
 
+	fmt.Println("Server listening on port :" + port + "...")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
-	print("Server started!")
 }
