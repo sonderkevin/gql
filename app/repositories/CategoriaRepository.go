@@ -27,7 +27,7 @@ func (r CategoriaRepository) GetAll() ([]*model.Categoria, error) {
 	return categorias, nil
 }
 
-func (r CategoriaRepository) GetById(id string) (*model.Categoria, error) {
+func (r CategoriaRepository) GetById(id int) (*model.Categoria, error) {
 	categoria := &model.Categoria{}
 
 	if err := r.DB.First(categoria, "id = ?", id).Error; err != nil {

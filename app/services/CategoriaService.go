@@ -17,3 +17,12 @@ func (s *CategoriaService) GetAllCategoria() ([]*model.Categoria, error) {
 
 	return dbCategories, nil
 }
+
+func (s *CategoriaService) GetById(id int) (*model.Categoria, error) {
+	dbCategoria, err := s.Repository.GetById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return dbCategoria, nil
+}

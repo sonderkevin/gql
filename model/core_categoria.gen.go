@@ -21,8 +21,8 @@ type Categoria struct {
 	Descuento        int32     `gorm:"column:descuento;not null" json:"descuento"`
 	CodigoPais       string    `gorm:"column:codigo_pais" json:"codigo_pais"`
 	CodigoLetra      string    `gorm:"column:codigo_letra" json:"codigo_letra"`
-	CategoriaPadre *Categoria     `gorm:"column:categoria_padre_id;foreignKey:ID" json:"categoria_padre_id"`
-	TipoCategoria  TipoCategoria     `gorm:"column:tipo_categoria_id;foreignKey:ID;not null" json:"tipo_categoria_id"`
+	CategoriaPadreID int32     `gorm:"column:categoria_padre_id" json:"categoria_padre_id"`
+	TipoCategoriaID  int32     `gorm:"column:tipo_categoria_id;not null" json:"tipo_categoria_id"`
 }
 
 // TableName Categoria's table name
