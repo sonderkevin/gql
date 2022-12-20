@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/sonderkevin/gql/app/repositories"
 	"github.com/sonderkevin/gql/app/services"
 	"github.com/sonderkevin/gql/graph"
@@ -26,15 +28,18 @@ func main() {
 }
 
 func setup() (string, *gorm.DB) {
-	// if err := godotenv.Load(); err != nil {
-	// 	panic(err)
-	// }
+	if err := godotenv.Load(); err != nil {
+		panic(err)
+	}
 
-	// port := os.Getenv("PORT")
-	// dsn := os.Getenv("DSN")
+	port := os.Getenv("PORT")
+	host := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	pass := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
 
-	port := "8080"
-	dsn := "host=localhost user=postgres password=rkvnh032!! dbname=wankar port=5432 sslmode=disable"
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, dbPort, user, pass, dbName)
 
 	if port == "" {
 		port = defaultPort
@@ -49,6 +54,8 @@ func setup() (string, *gorm.DB) {
 	if err != nil {
 		panic("failed to connect database" + err.Error())
 	}
+
+	fmt.Println("Connected to the database!")
 
 	return port, db
 }
