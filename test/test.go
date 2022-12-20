@@ -69,9 +69,9 @@ func setupServer(db *gorm.DB) *handler.Server {
 }
 
 func runServer(srv *handler.Server, port string) {
-	// http.Handle("/", http.FileServer(http.Dir("./public")))
 	http.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
 	http.Handle("/graphql", srv)
 
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+	print("Server started!")
 }

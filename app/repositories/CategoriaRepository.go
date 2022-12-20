@@ -20,7 +20,7 @@ func (r CategoriaRepository) Save(categoria *model.Categoria) (*model.Categoria,
 func (r CategoriaRepository) GetAll() ([]*model.Categoria, error) {
 	var categorias []*model.Categoria
 
-	if err := r.DB.Find(&categorias).Error; err != nil {
+	if err := r.DB.Preload("CategoriaPadre").Preload("TipoCategoria").Find(&categorias).Error; err != nil {
 		return nil, err
 	}
 

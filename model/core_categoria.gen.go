@@ -22,7 +22,9 @@ type Categoria struct {
 	CodigoPais       string    `gorm:"column:codigo_pais" json:"codigo_pais"`
 	CodigoLetra      string    `gorm:"column:codigo_letra" json:"codigo_letra"`
 	CategoriaPadreID int32     `gorm:"column:categoria_padre_id" json:"categoria_padre_id"`
+	CategoriaPadre   *Categoria `gorm:"many2one:CategoriaPadreID" json:"categoria_padre"`
 	TipoCategoriaID  int32     `gorm:"column:tipo_categoria_id;not null" json:"tipo_categoria_id"`
+	TipoCategoria    *TipoCategoria `gorm:"many2one:TipoCategoriaID" json:"tipo_categoria"`
 }
 
 // TableName Categoria's table name
