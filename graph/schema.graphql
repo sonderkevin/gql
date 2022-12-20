@@ -1,0 +1,86 @@
+scalar DateTime
+
+type User {
+  id: ID!
+  name: String!
+  friendsConnection: UserFriendsConnection
+}
+
+type UserFriendsConnection {
+  pageInfo: PageInfo!
+  edges: [UserFriendsEdge]
+}
+
+type UserFriendsEdge {
+  cursor: String!
+  node: User
+}
+
+type CategoriaNode {
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  id: ID!
+  categoriaPadre: CategoriaNode
+  tipoCategoria: TipoCategoriaNode!
+  descripcion: String!
+  imageDefault: String!
+  descuento: Int!
+  codigoPais: String
+  codigoLetra: String
+}
+
+type CategoriaNodeConnection {
+  pageInfo: PageInfo!
+  edges: [CategoriaNodeEdge]!
+}
+
+type CategoriaNodeEdge {
+  cursor: String!
+  node: CategoriaNode
+}
+
+type TipoCategoriaNode {
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  id: ID!
+
+  nombre: String!
+  abrev: String!
+  sub: String
+}
+
+type Query {
+  users (page: PageArgs): UserFriendsConnection!
+  allCategorias (
+    before: String
+    after: String
+    first: Int
+    last: Int
+    descripcion: String
+    descripcion_Icontains: String
+    tipoCategoria_Nombre: String
+    tipoCategoria_Nombre_Icontains: String
+    tipoCategoria_Abrev: String
+    tipoCategoria_Sub: String
+    tipoCategoria_Id: ID
+    categoriaPadre_Id: ID
+    codigoPais: String
+    codigoLetra: String
+    id: ID
+  ) : CategoriaNodeConnection
+}
+
+input PageArgs {
+  first: Int
+  after: String
+}
+
+type PageInfo {
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+  totalCount: Int
+  startCursor: String
+  endCursor: String
+}
