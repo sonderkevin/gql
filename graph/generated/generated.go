@@ -39,6 +39,7 @@ type Config struct {
 type ResolverRoot interface {
 	PageInfo() PageInfoResolver
 	Query() QueryResolver
+	PageArgs() PageArgsResolver
 }
 
 type DirectiveRoot struct {
@@ -69,6 +70,68 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	CompanniaNode struct {
+		Count           func(childComplexity int) int
+		EmpresaSet      func(childComplexity int, page *paging.PageArgs, input *model.EmpresaSetInput) int
+		Estado          func(childComplexity int) int
+		Fechacreado     func(childComplexity int) int
+		Fechamodificado func(childComplexity int) int
+		ID              func(childComplexity int) int
+		Nombre          func(childComplexity int) int
+		Pais            func(childComplexity int) int
+		Usuariocrea     func(childComplexity int) int
+	}
+
+	CompanniaNodeConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	CompanniaNodeEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	EmpresaNode struct {
+		APagar          func(childComplexity int) int
+		Categoria       func(childComplexity int) int
+		Compania        func(childComplexity int) int
+		Estado          func(childComplexity int) int
+		Fechacreado     func(childComplexity int) int
+		Fechamodificado func(childComplexity int) int
+		ID              func(childComplexity int) int
+		Latitud         func(childComplexity int) int
+		Longitud        func(childComplexity int) int
+		Movil           func(childComplexity int) int
+		Nombre          func(childComplexity int) int
+		Premium         func(childComplexity int) int
+		Referencia      func(childComplexity int) int
+		Tarjeta         func(childComplexity int) int
+		Urlweb          func(childComplexity int) int
+		Usuariocrea     func(childComplexity int) int
+	}
+
+	EmpresaNodeConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	EmpresaNodeEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	NomProductoNode struct {
+		Descripcion     func(childComplexity int) int
+		Estado          func(childComplexity int) int
+		Fechacreado     func(childComplexity int) int
+		Fechamodificado func(childComplexity int) int
+		ID              func(childComplexity int) int
+		ProductoSet     func(childComplexity int, page *paging.PageArgs, input *model.ProductoInput) int
+		Propiedades     func(childComplexity int, page *paging.PageArgs) int
+		Tipo            func(childComplexity int) int
+	}
+
 	PageInfo struct {
 		EndCursor       func(childComplexity int) int
 		HasNextPage     func(childComplexity int) int
@@ -77,9 +140,64 @@ type ComplexityRoot struct {
 		TotalCount      func(childComplexity int) int
 	}
 
+	ProductoNode struct {
+		Cantidad            func(childComplexity int) int
+		Codigo              func(childComplexity int) int
+		Count               func(childComplexity int) int
+		Descripcion         func(childComplexity int) int
+		DescripcionCompleta func(childComplexity int) int
+		Descuento           func(childComplexity int) int
+		Destacado           func(childComplexity int) int
+		Empresa             func(childComplexity int) int
+		Estado              func(childComplexity int) int
+		Fechacreado         func(childComplexity int) int
+		Fechamodificado     func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		Latitud             func(childComplexity int) int
+		Longitud            func(childComplexity int) int
+		Lote                func(childComplexity int) int
+		Preciocompra        func(childComplexity int) int
+		Precioventa         func(childComplexity int) int
+		Usuariocrea         func(childComplexity int) int
+		Visible             func(childComplexity int) int
+	}
+
+	ProductoNodeConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	ProductoNodeEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	PropiedadProdNode struct {
+		Descripcion     func(childComplexity int) int
+		Estado          func(childComplexity int) int
+		Fechacreado     func(childComplexity int) int
+		Fechamodificado func(childComplexity int) int
+		ID              func(childComplexity int) int
+		Tipo            func(childComplexity int) int
+		Usuariocrea     func(childComplexity int) int
+	}
+
+	PropiedadProdNodeConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	PropiedadProdNodeEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	Query struct {
-		AllCategorias func(childComplexity int, before *string, after *string, first *int, last *int, descripcion *string, descripcionIcontains *string, tipoCategoriaNombre *string, tipoCategoriaNombreIcontains *string, tipoCategoriaAbrev *string, tipoCategoriaSub *string, tipoCategoriaID *string, categoriaPadreID *string, codigoPais *string, codigoLetra *string, id *string) int
-		Users         func(childComplexity int, page *paging.PageArgs) int
+		Categoria  func(childComplexity int, id string) int
+		Categorias func(childComplexity int, page *paging.PageArgs, input *model.AllCategoriasInput) int
+		Producto   func(childComplexity int, id string) int
+		Productos  func(childComplexity int, page *paging.PageArgs, input *model.ProductoInput) int
+		Users      func(childComplexity int, page *paging.PageArgs) int
 	}
 
 	TipoCategoriaNode struct {
@@ -118,7 +236,15 @@ type PageInfoResolver interface {
 }
 type QueryResolver interface {
 	Users(ctx context.Context, page *paging.PageArgs) (*model.UserFriendsConnection, error)
-	AllCategorias(ctx context.Context, before *string, after *string, first *int, last *int, descripcion *string, descripcionIcontains *string, tipoCategoriaNombre *string, tipoCategoriaNombreIcontains *string, tipoCategoriaAbrev *string, tipoCategoriaSub *string, tipoCategoriaID *string, categoriaPadreID *string, codigoPais *string, codigoLetra *string, id *string) (*model.CategoriaNodeConnection, error)
+	Categoria(ctx context.Context, id string) (*model.CategoriaNode, error)
+	Categorias(ctx context.Context, page *paging.PageArgs, input *model.AllCategoriasInput) (*model.CategoriaNodeConnection, error)
+	Producto(ctx context.Context, id string) (*model.ProductoNode, error)
+	Productos(ctx context.Context, page *paging.PageArgs, input *model.ProductoInput) (*model.ProductoNodeConnection, error)
+}
+
+type PageArgsResolver interface {
+	Last(ctx context.Context, obj *paging.PageArgs, data *int) error
+	Before(ctx context.Context, obj *paging.PageArgs, data *string) error
 }
 
 type executableSchema struct {
@@ -241,6 +367,308 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.CategoriaNodeEdge.Node(childComplexity), true
 
+	case "CompanniaNode.count":
+		if e.complexity.CompanniaNode.Count == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNode.Count(childComplexity), true
+
+	case "CompanniaNode.empresaSet":
+		if e.complexity.CompanniaNode.EmpresaSet == nil {
+			break
+		}
+
+		args, err := ec.field_CompanniaNode_empresaSet_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CompanniaNode.EmpresaSet(childComplexity, args["page"].(*paging.PageArgs), args["input"].(*model.EmpresaSetInput)), true
+
+	case "CompanniaNode.estado":
+		if e.complexity.CompanniaNode.Estado == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNode.Estado(childComplexity), true
+
+	case "CompanniaNode.fechacreado":
+		if e.complexity.CompanniaNode.Fechacreado == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNode.Fechacreado(childComplexity), true
+
+	case "CompanniaNode.fechamodificado":
+		if e.complexity.CompanniaNode.Fechamodificado == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNode.Fechamodificado(childComplexity), true
+
+	case "CompanniaNode.id":
+		if e.complexity.CompanniaNode.ID == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNode.ID(childComplexity), true
+
+	case "CompanniaNode.nombre":
+		if e.complexity.CompanniaNode.Nombre == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNode.Nombre(childComplexity), true
+
+	case "CompanniaNode.pais":
+		if e.complexity.CompanniaNode.Pais == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNode.Pais(childComplexity), true
+
+	case "CompanniaNode.usuariocrea":
+		if e.complexity.CompanniaNode.Usuariocrea == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNode.Usuariocrea(childComplexity), true
+
+	case "CompanniaNodeConnection.edges":
+		if e.complexity.CompanniaNodeConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNodeConnection.Edges(childComplexity), true
+
+	case "CompanniaNodeConnection.pageInfo":
+		if e.complexity.CompanniaNodeConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNodeConnection.PageInfo(childComplexity), true
+
+	case "CompanniaNodeEdge.cursor":
+		if e.complexity.CompanniaNodeEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNodeEdge.Cursor(childComplexity), true
+
+	case "CompanniaNodeEdge.node":
+		if e.complexity.CompanniaNodeEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CompanniaNodeEdge.Node(childComplexity), true
+
+	case "EmpresaNode.aPagar":
+		if e.complexity.EmpresaNode.APagar == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.APagar(childComplexity), true
+
+	case "EmpresaNode.categoria":
+		if e.complexity.EmpresaNode.Categoria == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Categoria(childComplexity), true
+
+	case "EmpresaNode.compania":
+		if e.complexity.EmpresaNode.Compania == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Compania(childComplexity), true
+
+	case "EmpresaNode.estado":
+		if e.complexity.EmpresaNode.Estado == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Estado(childComplexity), true
+
+	case "EmpresaNode.fechacreado":
+		if e.complexity.EmpresaNode.Fechacreado == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Fechacreado(childComplexity), true
+
+	case "EmpresaNode.fechamodificado":
+		if e.complexity.EmpresaNode.Fechamodificado == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Fechamodificado(childComplexity), true
+
+	case "EmpresaNode.id":
+		if e.complexity.EmpresaNode.ID == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.ID(childComplexity), true
+
+	case "EmpresaNode.latitud":
+		if e.complexity.EmpresaNode.Latitud == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Latitud(childComplexity), true
+
+	case "EmpresaNode.longitud":
+		if e.complexity.EmpresaNode.Longitud == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Longitud(childComplexity), true
+
+	case "EmpresaNode.movil":
+		if e.complexity.EmpresaNode.Movil == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Movil(childComplexity), true
+
+	case "EmpresaNode.nombre":
+		if e.complexity.EmpresaNode.Nombre == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Nombre(childComplexity), true
+
+	case "EmpresaNode.premium":
+		if e.complexity.EmpresaNode.Premium == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Premium(childComplexity), true
+
+	case "EmpresaNode.referencia":
+		if e.complexity.EmpresaNode.Referencia == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Referencia(childComplexity), true
+
+	case "EmpresaNode.tarjeta":
+		if e.complexity.EmpresaNode.Tarjeta == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Tarjeta(childComplexity), true
+
+	case "EmpresaNode.urlweb":
+		if e.complexity.EmpresaNode.Urlweb == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Urlweb(childComplexity), true
+
+	case "EmpresaNode.usuariocrea":
+		if e.complexity.EmpresaNode.Usuariocrea == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNode.Usuariocrea(childComplexity), true
+
+	case "EmpresaNodeConnection.edges":
+		if e.complexity.EmpresaNodeConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNodeConnection.Edges(childComplexity), true
+
+	case "EmpresaNodeConnection.pageInfo":
+		if e.complexity.EmpresaNodeConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNodeConnection.PageInfo(childComplexity), true
+
+	case "EmpresaNodeEdge.cursor":
+		if e.complexity.EmpresaNodeEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNodeEdge.Cursor(childComplexity), true
+
+	case "EmpresaNodeEdge.node":
+		if e.complexity.EmpresaNodeEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.EmpresaNodeEdge.Node(childComplexity), true
+
+	case "NomProductoNode.descripcion":
+		if e.complexity.NomProductoNode.Descripcion == nil {
+			break
+		}
+
+		return e.complexity.NomProductoNode.Descripcion(childComplexity), true
+
+	case "NomProductoNode.estado":
+		if e.complexity.NomProductoNode.Estado == nil {
+			break
+		}
+
+		return e.complexity.NomProductoNode.Estado(childComplexity), true
+
+	case "NomProductoNode.fechacreado":
+		if e.complexity.NomProductoNode.Fechacreado == nil {
+			break
+		}
+
+		return e.complexity.NomProductoNode.Fechacreado(childComplexity), true
+
+	case "NomProductoNode.fechamodificado":
+		if e.complexity.NomProductoNode.Fechamodificado == nil {
+			break
+		}
+
+		return e.complexity.NomProductoNode.Fechamodificado(childComplexity), true
+
+	case "NomProductoNode.id":
+		if e.complexity.NomProductoNode.ID == nil {
+			break
+		}
+
+		return e.complexity.NomProductoNode.ID(childComplexity), true
+
+	case "NomProductoNode.productoSet":
+		if e.complexity.NomProductoNode.ProductoSet == nil {
+			break
+		}
+
+		args, err := ec.field_NomProductoNode_productoSet_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.NomProductoNode.ProductoSet(childComplexity, args["page"].(*paging.PageArgs), args["input"].(*model.ProductoInput)), true
+
+	case "NomProductoNode.propiedades":
+		if e.complexity.NomProductoNode.Propiedades == nil {
+			break
+		}
+
+		args, err := ec.field_NomProductoNode_propiedades_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.NomProductoNode.Propiedades(childComplexity, args["page"].(*paging.PageArgs)), true
+
+	case "NomProductoNode.tipo":
+		if e.complexity.NomProductoNode.Tipo == nil {
+			break
+		}
+
+		return e.complexity.NomProductoNode.Tipo(childComplexity), true
+
 	case "PageInfo.endCursor":
 		if e.complexity.PageInfo.EndCursor == nil {
 			break
@@ -276,17 +704,291 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PageInfo.TotalCount(childComplexity), true
 
-	case "Query.allCategorias":
-		if e.complexity.Query.AllCategorias == nil {
+	case "ProductoNode.cantidad":
+		if e.complexity.ProductoNode.Cantidad == nil {
 			break
 		}
 
-		args, err := ec.field_Query_allCategorias_args(context.TODO(), rawArgs)
+		return e.complexity.ProductoNode.Cantidad(childComplexity), true
+
+	case "ProductoNode.codigo":
+		if e.complexity.ProductoNode.Codigo == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Codigo(childComplexity), true
+
+	case "ProductoNode.count":
+		if e.complexity.ProductoNode.Count == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Count(childComplexity), true
+
+	case "ProductoNode.descripcion":
+		if e.complexity.ProductoNode.Descripcion == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Descripcion(childComplexity), true
+
+	case "ProductoNode.descripcionCompleta":
+		if e.complexity.ProductoNode.DescripcionCompleta == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.DescripcionCompleta(childComplexity), true
+
+	case "ProductoNode.descuento":
+		if e.complexity.ProductoNode.Descuento == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Descuento(childComplexity), true
+
+	case "ProductoNode.destacado":
+		if e.complexity.ProductoNode.Destacado == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Destacado(childComplexity), true
+
+	case "ProductoNode.empresa":
+		if e.complexity.ProductoNode.Empresa == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Empresa(childComplexity), true
+
+	case "ProductoNode.estado":
+		if e.complexity.ProductoNode.Estado == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Estado(childComplexity), true
+
+	case "ProductoNode.fechacreado":
+		if e.complexity.ProductoNode.Fechacreado == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Fechacreado(childComplexity), true
+
+	case "ProductoNode.fechamodificado":
+		if e.complexity.ProductoNode.Fechamodificado == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Fechamodificado(childComplexity), true
+
+	case "ProductoNode.id":
+		if e.complexity.ProductoNode.ID == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.ID(childComplexity), true
+
+	case "ProductoNode.latitud":
+		if e.complexity.ProductoNode.Latitud == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Latitud(childComplexity), true
+
+	case "ProductoNode.longitud":
+		if e.complexity.ProductoNode.Longitud == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Longitud(childComplexity), true
+
+	case "ProductoNode.lote":
+		if e.complexity.ProductoNode.Lote == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Lote(childComplexity), true
+
+	case "ProductoNode.preciocompra":
+		if e.complexity.ProductoNode.Preciocompra == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Preciocompra(childComplexity), true
+
+	case "ProductoNode.precioventa":
+		if e.complexity.ProductoNode.Precioventa == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Precioventa(childComplexity), true
+
+	case "ProductoNode.usuariocrea":
+		if e.complexity.ProductoNode.Usuariocrea == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Usuariocrea(childComplexity), true
+
+	case "ProductoNode.visible":
+		if e.complexity.ProductoNode.Visible == nil {
+			break
+		}
+
+		return e.complexity.ProductoNode.Visible(childComplexity), true
+
+	case "ProductoNodeConnection.edges":
+		if e.complexity.ProductoNodeConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ProductoNodeConnection.Edges(childComplexity), true
+
+	case "ProductoNodeConnection.pageInfo":
+		if e.complexity.ProductoNodeConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ProductoNodeConnection.PageInfo(childComplexity), true
+
+	case "ProductoNodeEdge.cursor":
+		if e.complexity.ProductoNodeEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ProductoNodeEdge.Cursor(childComplexity), true
+
+	case "ProductoNodeEdge.node":
+		if e.complexity.ProductoNodeEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ProductoNodeEdge.Node(childComplexity), true
+
+	case "PropiedadProdNode.descripcion":
+		if e.complexity.PropiedadProdNode.Descripcion == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNode.Descripcion(childComplexity), true
+
+	case "PropiedadProdNode.estado":
+		if e.complexity.PropiedadProdNode.Estado == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNode.Estado(childComplexity), true
+
+	case "PropiedadProdNode.fechacreado":
+		if e.complexity.PropiedadProdNode.Fechacreado == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNode.Fechacreado(childComplexity), true
+
+	case "PropiedadProdNode.fechamodificado":
+		if e.complexity.PropiedadProdNode.Fechamodificado == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNode.Fechamodificado(childComplexity), true
+
+	case "PropiedadProdNode.id":
+		if e.complexity.PropiedadProdNode.ID == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNode.ID(childComplexity), true
+
+	case "PropiedadProdNode.tipo":
+		if e.complexity.PropiedadProdNode.Tipo == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNode.Tipo(childComplexity), true
+
+	case "PropiedadProdNode.usuariocrea":
+		if e.complexity.PropiedadProdNode.Usuariocrea == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNode.Usuariocrea(childComplexity), true
+
+	case "PropiedadProdNodeConnection.edges":
+		if e.complexity.PropiedadProdNodeConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNodeConnection.Edges(childComplexity), true
+
+	case "PropiedadProdNodeConnection.pageInfo":
+		if e.complexity.PropiedadProdNodeConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNodeConnection.PageInfo(childComplexity), true
+
+	case "PropiedadProdNodeEdge.cursor":
+		if e.complexity.PropiedadProdNodeEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNodeEdge.Cursor(childComplexity), true
+
+	case "PropiedadProdNodeEdge.node":
+		if e.complexity.PropiedadProdNodeEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PropiedadProdNodeEdge.Node(childComplexity), true
+
+	case "Query.categoria":
+		if e.complexity.Query.Categoria == nil {
+			break
+		}
+
+		args, err := ec.field_Query_categoria_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.AllCategorias(childComplexity, args["before"].(*string), args["after"].(*string), args["first"].(*int), args["last"].(*int), args["descripcion"].(*string), args["descripcion_Icontains"].(*string), args["tipoCategoria_Nombre"].(*string), args["tipoCategoria_Nombre_Icontains"].(*string), args["tipoCategoria_Abrev"].(*string), args["tipoCategoria_Sub"].(*string), args["tipoCategoria_Id"].(*string), args["categoriaPadre_Id"].(*string), args["codigoPais"].(*string), args["codigoLetra"].(*string), args["id"].(*string)), true
+		return e.complexity.Query.Categoria(childComplexity, args["id"].(string)), true
+
+	case "Query.categorias":
+		if e.complexity.Query.Categorias == nil {
+			break
+		}
+
+		args, err := ec.field_Query_categorias_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Categorias(childComplexity, args["page"].(*paging.PageArgs), args["input"].(*model.AllCategoriasInput)), true
+
+	case "Query.producto":
+		if e.complexity.Query.Producto == nil {
+			break
+		}
+
+		args, err := ec.field_Query_producto_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Producto(childComplexity, args["id"].(string)), true
+
+	case "Query.productos":
+		if e.complexity.Query.Productos == nil {
+			break
+		}
+
+		args, err := ec.field_Query_productos_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Productos(childComplexity, args["page"].(*paging.PageArgs), args["input"].(*model.ProductoInput)), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -406,7 +1108,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputAllCategoriasInput,
+		ec.unmarshalInputArticleSetInput,
+		ec.unmarshalInputEmpresaSetInput,
 		ec.unmarshalInputPageArgs,
+		ec.unmarshalInputPersonSetInput,
+		ec.unmarshalInputProductoInput,
+		ec.unmarshalInputProductoMSetInput,
+		ec.unmarshalInputServicioSetInput,
 	)
 	first := true
 
@@ -452,34 +1161,30 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../schema.graphql", Input: `scalar DateTime
-
-type User {
+	{Name: "../schema/categoria.schema.graphql", Input: `type CategoriaNode {
   id: ID!
-  name: String!
-  friendsConnection: UserFriendsConnection
-}
-
-type UserFriendsConnection {
-  pageInfo: PageInfo!
-  edges: [UserFriendsEdge]
-}
-
-type UserFriendsEdge {
-  cursor: String!
-  node: User
-}
-
-type CategoriaNode {
   estado: Boolean!
   fechacreado: DateTime!
   fechamodificado: DateTime!
-  id: ID!
   categoriaPadre: CategoriaNode
   tipoCategoria: TipoCategoriaNode!
   descripcion: String!
   imageDefault: String!
   descuento: Int!
+  codigoPais: String
+  codigoLetra: String
+}
+
+input AllCategoriasInput {
+  id: ID
+  descripcion: String
+  descripcionContains: String
+  tipoCategoriaNombre: String
+  tipoCategoriaNombreContains: String
+  tipoCategoriaAbrev: String
+  tipoCategoriaSub: String
+  tipoCategoriaId: ID
+  categoriaPadreId: ID
   codigoPais: String
   codigoLetra: String
 }
@@ -493,41 +1198,256 @@ type CategoriaNodeEdge {
   cursor: String!
   node: CategoriaNode
 }
-
-type TipoCategoriaNode {
+`, BuiltIn: false},
+	{Name: "../schema/compannia.schema.graphql", Input: `type CompanniaNode {
+  id: ID!
   estado: Boolean!
   fechacreado: DateTime!
   fechamodificado: DateTime!
-  id: ID!
-
+  usuariocrea: String
   nombre: String!
-  abrev: String!
-  sub: String
+  pais: CategoriaNode!
+  empresaSet(page: PageArgs, input: EmpresaSetInput): EmpresaNodeConnection!
+#   xuserSet: [XUserType!]!
+  count: Int
 }
 
+type CompanniaNodeConnection {
+  pageInfo: PageInfo!
+  edges: [CompanniaNodeEdge]!
+}
+
+type CompanniaNodeEdge {
+  cursor: String!
+  node: CompanniaNode
+}
+
+input EmpresaSetInput {
+  id: ID
+  categoria_Id: ID
+  nombre: String
+  nombre_Icontains: String
+  nombre_Istartswith: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/empresa.schema.graphql", Input: `type EmpresaNode {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  usuariocrea: String
+  compania: CompanniaNode!
+  nombre: String!
+  tarjeta: String!
+  aPagar: Float!
+  premium: Boolean!
+#   barrio: BarrioNode!
+  categoria: CategoriaNode!
+  latitud: Float!
+  longitud: Float!
+  movil: Boolean!
+  urlweb: String!
+  referencia: String
+#   empresaFavorito: [XUserType!]!
+#   truequeSet(page: PageArgs): TruequeNodeConnection!
+#   productoSet(page: PageArgs, input: ProductoSetInput): ProductoNodeConnection!
+#   servicioSet(page: PageArgs, input: ServicioSetInput): ServicioNodeConnection!
+#   articleSet(page: PageArgs, input: ArticleSetInput): ArticleNodeConnection!
+#   personSet(page: PageArgs, input: PersonSetInput): PersonNodeConnection!
+#   images(page: PageArgs): ImageNodeConnection!
+#   facturaencSet(page: PageArgs): FacturaEncNodeConnection!
+#   comentarioempresaSet(page: PageArgs): ComentarioEmpresaNodeConnection!
+#   feriaEmp(page: PageArgs, nombre: String): FeriaNodeConnection!
+#   empresasConfig(page: PageArgs): ConfigAplicadaNodeConnection!
+#   count: Int
+}
+
+type EmpresaNodeConnection {
+  pageInfo: PageInfo!
+  edges: [EmpresaNodeEdge]!
+}
+
+type EmpresaNodeEdge {
+  cursor: String!
+  node: EmpresaNode
+}
+
+input ArticleSetInput {
+  title: String
+  title_Icontains: String
+  title_Istartswith: String
+  content: String
+  content_Icontains: String
+  business: ID
+  business_Nombre: String
+  business_Nombre_Icontains: String
+}
+
+input PersonSetInput {
+  firstName: String
+  firstName_Icontains: String
+  firstName_Istartswith: String
+  lastName: String
+  lastName_Icontains: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/product.schema.graphql", Input: `type ProductoNode {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  usuariocrea: String
+  codigo: String
+  descripcionCompleta: String
+  preciocompra: Float!
+  precioventa: Float!
+  cantidad: Int!
+  lote: Boolean!
+  visible: Boolean!
+  descuento: Int!
+  latitud: Float!
+  longitud: Float!
+  destacado: Int
+
+  descripcion: NomProductoNode!
+  empresa: EmpresaNode!
+  # marca: MarcaNode
+
+  # usuariosProd: [XUserType!]!
+  # calificacionSet: [CalificacionNode!]!
+
+  #   propvalores(page: PageArgs): PropiedadProdValorNodeConnection!
+  #   prodOfrecidos(page: PageArgs): TruequeNodeConnection!
+  #   truequeSet(page: PageArgs): TruequeNodeConnection!
+  #   images(page: PageArgs): ImageNodeConnection!
+  #   comentarioSet(page: PageArgs): ComentarioNodeConnection!
+
+  count: Int
+}
+
+type ProductoNodeConnection {
+  pageInfo: PageInfo!
+  edges: [ProductoNodeEdge]!
+}
+
+type ProductoNodeEdge {
+  cursor: String!
+  node: ProductoNode
+}
+
+type NomProductoNode {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  tipo: String!
+  descripcion: String!
+  # subcategoria: SubCategoriaNode
+  propiedades(page: PageArgs): PropiedadProdNodeConnection!
+  productoSet(page: PageArgs, input: ProductoInput): ProductoNodeConnection!
+  #   servicioSet(page: PageArgs, input: ServicioSetInput): ServicioNodeConnection!
+  #   productomSet(
+  #     page: PageArgs,
+  #     input: ProductoMSetInput
+  #   ): ProductomNodeConnection!
+}
+
+type PropiedadProdNode {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  usuariocrea: String
+  tipo: PropiedadProdTipo!
+  descripcion: String!
+  # subcategorias(page: PageArgs, descripcion: String, descripcion_Icontains: String): SubCategoriaNodeConnection!
+  # propiedadprodvalorSet(page: PageArgs): PropiedadProdValorNodeConnection!
+  # nomencladorproductoSet(page: PageArgs, descripcion: String, descripcion_Icontains: String, subcategoria: ID, subcategoria_Descripcion: String, subcategoria_Descripcion_Icontains: String, tipo: String): NomProductoNodeConnection!
+}
+
+type PropiedadProdNodeConnection {
+  pageInfo: PageInfo!
+  edges: [PropiedadProdNodeEdge]!
+}
+
+type PropiedadProdNodeEdge {
+  cursor: String!
+  node: PropiedadProdNode
+}
+
+enum PropiedadProdTipo {
+  PRODUCTO
+  SERVICIO
+}
+
+input ProductoInput {
+  destacado: Int
+  destacado_Icontains: Int
+  descripcion_Descripcion: String
+  descripcion_Descripcion_Icontains: String
+  descripcion_Descripcion_Istartswith: String
+  descripcion_Subcategoria_Descripcion: String
+  descripcion_Subcategoria_Descripcion_Icontains: String
+  descripcion_Subcategoria_Categoria: ID
+  descripcion_Subcategoria_Id: ID
+  descripcion_Subcategoria_Categoria_Descripcion: String
+  descripcion_Subcategoria_Categoria_Descripcion_Icontains: String
+  marca: ID
+  marca_Descripcion: String
+  marca_Descripcion_Icontains: String
+  empresa: ID
+  empresa_Nombre: String
+  empresa_Nombre_Icontains: String
+}
+
+input ProductoMSetInput {
+  seccion_Categoria_Id: ID
+  seccion_Categoria_Id_Icontains: ID
+  seccion_Categoria_Id_Istartswith: ID
+  seccion_Categoria_Descripcion: String
+  seccion_Categoria_Descripcion_Icontains: String
+  presentacion_Categoria: [ID]
+  presentacion_Categoria_Descripcion: String
+  presentacion_Categoria_Descripcion_Icontains: String
+  tipopeso_Categoria: [ID]
+  tipopeso_Categoria_Descripcion: String
+  tipopeso_Categoria_Descripcion_Icontains: String
+  producto_Descripcion: String
+  producto_Descripcion_Icontains: String
+  producto_Descripcion_Istartswith: String
+}
+
+input ServicioSetInput {
+  destacado: Int
+  destacado_Icontains: Int
+  descripcion_Descripcion: String
+  descripcion_Descripcion_Icontains: String
+  descripcion_Descripcion_Istartswith: String
+  descripcion_Subcategoria_Id: ID
+  descripcion_Subcategoria_Descripcion: String
+  descripcion_Subcategoria_Descripcion_Icontains: String
+  descripcion_Subcategoria_Categoria: ID
+  descripcion_Subcategoria_Categoria_Descripcion: String
+  descripcion_Subcategoria_Categoria_Descripcion_Icontains: String
+  empresa: ID
+  empresa_Nombre: String
+  empresa_Nombre_Icontains: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/schema.graphql", Input: `scalar DateTime
+
 type Query {
-  users (page: PageArgs): UserFriendsConnection!
-  allCategorias (
-    before: String
-    after: String
-    first: Int
-    last: Int
-    descripcion: String
-    descripcion_Icontains: String
-    tipoCategoria_Nombre: String
-    tipoCategoria_Nombre_Icontains: String
-    tipoCategoria_Abrev: String
-    tipoCategoria_Sub: String
-    tipoCategoria_Id: ID
-    categoriaPadre_Id: ID
-    codigoPais: String
-    codigoLetra: String
-    id: ID
-  ) : CategoriaNodeConnection
+  users(page: PageArgs): UserFriendsConnection!
+  categoria(id: ID!): CategoriaNode
+  categorias(page: PageArgs, input: AllCategoriasInput): CategoriaNodeConnection
+  producto(id: ID!): ProductoNode
+  productos(page: PageArgs, input: ProductoInput): ProductoNodeConnection
 }
 
 input PageArgs {
   first: Int
+  last: Int
+  before: String
   after: String
 }
 
@@ -537,6 +1457,31 @@ type PageInfo {
   totalCount: Int
   startCursor: String
   endCursor: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/tipoCategoria.schema.graphql", Input: `type TipoCategoriaNode {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  nombre: String!
+  abrev: String!
+  sub: String
+}`, BuiltIn: false},
+	{Name: "../schema/user.schema.graphql", Input: `type User {
+  id: ID!
+  name: String!
+  friendsConnection: UserFriendsConnection
+}
+
+type UserFriendsConnection {
+  pageInfo: PageInfo!
+  edges: [UserFriendsEdge]
+}
+
+type UserFriendsEdge {
+  cursor: String!
+  node: User
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -544,6 +1489,69 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_CompanniaNode_empresaSet_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *paging.PageArgs
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOPageArgs2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageArgs(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *model.EmpresaSetInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalOEmpresaSetInput2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaSetInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_NomProductoNode_productoSet_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *paging.PageArgs
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOPageArgs2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageArgs(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *model.ProductoInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalOProductoInput2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_NomProductoNode_propiedades_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *paging.PageArgs
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOPageArgs2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageArgs(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	return args, nil
+}
 
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -560,144 +1568,81 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_allCategorias_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_categoria_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
-	if tmp, ok := rawArgs["before"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["before"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["after"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["after"] = arg1
-	var arg2 *int
-	if tmp, ok := rawArgs["first"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["first"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["last"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last"] = arg3
-	var arg4 *string
-	if tmp, ok := rawArgs["descripcion"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["descripcion"] = arg4
-	var arg5 *string
-	if tmp, ok := rawArgs["descripcion_Icontains"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Icontains"))
-		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["descripcion_Icontains"] = arg5
-	var arg6 *string
-	if tmp, ok := rawArgs["tipoCategoria_Nombre"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoria_Nombre"))
-		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["tipoCategoria_Nombre"] = arg6
-	var arg7 *string
-	if tmp, ok := rawArgs["tipoCategoria_Nombre_Icontains"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoria_Nombre_Icontains"))
-		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["tipoCategoria_Nombre_Icontains"] = arg7
-	var arg8 *string
-	if tmp, ok := rawArgs["tipoCategoria_Abrev"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoria_Abrev"))
-		arg8, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["tipoCategoria_Abrev"] = arg8
-	var arg9 *string
-	if tmp, ok := rawArgs["tipoCategoria_Sub"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoria_Sub"))
-		arg9, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["tipoCategoria_Sub"] = arg9
-	var arg10 *string
-	if tmp, ok := rawArgs["tipoCategoria_Id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoria_Id"))
-		arg10, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["tipoCategoria_Id"] = arg10
-	var arg11 *string
-	if tmp, ok := rawArgs["categoriaPadre_Id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoriaPadre_Id"))
-		arg11, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["categoriaPadre_Id"] = arg11
-	var arg12 *string
-	if tmp, ok := rawArgs["codigoPais"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("codigoPais"))
-		arg12, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["codigoPais"] = arg12
-	var arg13 *string
-	if tmp, ok := rawArgs["codigoLetra"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("codigoLetra"))
-		arg13, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["codigoLetra"] = arg13
-	var arg14 *string
+	var arg0 string
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg14, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id"] = arg14
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_categorias_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *paging.PageArgs
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOPageArgs2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageArgs(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *model.AllCategoriasInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalOAllCategoriasInput2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐAllCategoriasInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_producto_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_productos_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *paging.PageArgs
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg0, err = ec.unmarshalOPageArgs2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageArgs(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg0
+	var arg1 *model.ProductoInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalOProductoInput2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -753,6 +1698,50 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _CategoriaNode_id(ctx context.Context, field graphql.CollectedField, obj *model.CategoriaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CategoriaNode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CategoriaNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoriaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _CategoriaNode_estado(ctx context.Context, field graphql.CollectedField, obj *model.CategoriaNode) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CategoriaNode_estado(ctx, field)
@@ -886,50 +1875,6 @@ func (ec *executionContext) fieldContext_CategoriaNode_fechamodificado(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _CategoriaNode_id(ctx context.Context, field graphql.CollectedField, obj *model.CategoriaNode) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CategoriaNode_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CategoriaNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CategoriaNode",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _CategoriaNode_categoriaPadre(ctx context.Context, field graphql.CollectedField, obj *model.CategoriaNode) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CategoriaNode_categoriaPadre(ctx, field)
 	if err != nil {
@@ -966,14 +1911,14 @@ func (ec *executionContext) fieldContext_CategoriaNode_categoriaPadre(ctx contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "id":
+				return ec.fieldContext_CategoriaNode_id(ctx, field)
 			case "estado":
 				return ec.fieldContext_CategoriaNode_estado(ctx, field)
 			case "fechacreado":
 				return ec.fieldContext_CategoriaNode_fechacreado(ctx, field)
 			case "fechamodificado":
 				return ec.fieldContext_CategoriaNode_fechamodificado(ctx, field)
-			case "id":
-				return ec.fieldContext_CategoriaNode_id(ctx, field)
 			case "categoriaPadre":
 				return ec.fieldContext_CategoriaNode_categoriaPadre(ctx, field)
 			case "tipoCategoria":
@@ -1034,14 +1979,14 @@ func (ec *executionContext) fieldContext_CategoriaNode_tipoCategoria(ctx context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "id":
+				return ec.fieldContext_TipoCategoriaNode_id(ctx, field)
 			case "estado":
 				return ec.fieldContext_TipoCategoriaNode_estado(ctx, field)
 			case "fechacreado":
 				return ec.fieldContext_TipoCategoriaNode_fechacreado(ctx, field)
 			case "fechamodificado":
 				return ec.fieldContext_TipoCategoriaNode_fechamodificado(ctx, field)
-			case "id":
-				return ec.fieldContext_TipoCategoriaNode_id(ctx, field)
 			case "nombre":
 				return ec.fieldContext_TipoCategoriaNode_nombre(ctx, field)
 			case "abrev":
@@ -1455,14 +2400,14 @@ func (ec *executionContext) fieldContext_CategoriaNodeEdge_node(ctx context.Cont
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "id":
+				return ec.fieldContext_CategoriaNode_id(ctx, field)
 			case "estado":
 				return ec.fieldContext_CategoriaNode_estado(ctx, field)
 			case "fechacreado":
 				return ec.fieldContext_CategoriaNode_fechacreado(ctx, field)
 			case "fechamodificado":
 				return ec.fieldContext_CategoriaNode_fechamodificado(ctx, field)
-			case "id":
-				return ec.fieldContext_CategoriaNode_id(ctx, field)
 			case "categoriaPadre":
 				return ec.fieldContext_CategoriaNode_categoriaPadre(ctx, field)
 			case "tipoCategoria":
@@ -1480,6 +2425,2001 @@ func (ec *executionContext) fieldContext_CategoriaNodeEdge_node(ctx context.Cont
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CategoriaNode", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_id(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_estado(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_estado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Estado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_estado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_fechacreado(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_fechacreado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechacreado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_fechacreado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_fechamodificado(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_fechamodificado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechamodificado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_fechamodificado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_usuariocrea(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_usuariocrea(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Usuariocrea, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_usuariocrea(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_nombre(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_nombre(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nombre, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_nombre(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_pais(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_pais(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pais, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.CategoriaNode)
+	fc.Result = res
+	return ec.marshalNCategoriaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCategoriaNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_pais(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CategoriaNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_CategoriaNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_CategoriaNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_CategoriaNode_fechamodificado(ctx, field)
+			case "categoriaPadre":
+				return ec.fieldContext_CategoriaNode_categoriaPadre(ctx, field)
+			case "tipoCategoria":
+				return ec.fieldContext_CategoriaNode_tipoCategoria(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_CategoriaNode_descripcion(ctx, field)
+			case "imageDefault":
+				return ec.fieldContext_CategoriaNode_imageDefault(ctx, field)
+			case "descuento":
+				return ec.fieldContext_CategoriaNode_descuento(ctx, field)
+			case "codigoPais":
+				return ec.fieldContext_CategoriaNode_codigoPais(ctx, field)
+			case "codigoLetra":
+				return ec.fieldContext_CategoriaNode_codigoLetra(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoriaNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_empresaSet(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_empresaSet(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EmpresaSet, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.EmpresaNodeConnection)
+	fc.Result = res
+	return ec.marshalNEmpresaNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNodeConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_empresaSet(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "pageInfo":
+				return ec.fieldContext_EmpresaNodeConnection_pageInfo(ctx, field)
+			case "edges":
+				return ec.fieldContext_EmpresaNodeConnection_edges(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EmpresaNodeConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_CompanniaNode_empresaSet_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNode_count(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNode_count(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Count, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNode_count(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNodeConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNodeConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNodeConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*paging.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNodeConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNodeConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PageInfo_totalCount(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNodeConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNodeConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNodeConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.CompanniaNodeEdge)
+	fc.Result = res
+	return ec.marshalNCompanniaNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCompanniaNodeEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNodeConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNodeConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "cursor":
+				return ec.fieldContext_CompanniaNodeEdge_cursor(ctx, field)
+			case "node":
+				return ec.fieldContext_CompanniaNodeEdge_node(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CompanniaNodeEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNodeEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNodeEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNodeEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNodeEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNodeEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CompanniaNodeEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.CompanniaNodeEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CompanniaNodeEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.CompanniaNode)
+	fc.Result = res
+	return ec.marshalOCompanniaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCompanniaNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CompanniaNodeEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CompanniaNodeEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CompanniaNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_CompanniaNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_CompanniaNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_CompanniaNode_fechamodificado(ctx, field)
+			case "usuariocrea":
+				return ec.fieldContext_CompanniaNode_usuariocrea(ctx, field)
+			case "nombre":
+				return ec.fieldContext_CompanniaNode_nombre(ctx, field)
+			case "pais":
+				return ec.fieldContext_CompanniaNode_pais(ctx, field)
+			case "empresaSet":
+				return ec.fieldContext_CompanniaNode_empresaSet(ctx, field)
+			case "count":
+				return ec.fieldContext_CompanniaNode_count(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CompanniaNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_id(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_estado(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_estado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Estado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_estado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_fechacreado(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_fechacreado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechacreado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_fechacreado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_fechamodificado(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_fechamodificado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechamodificado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_fechamodificado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_usuariocrea(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_usuariocrea(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Usuariocrea, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_usuariocrea(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_compania(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_compania(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Compania, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.CompanniaNode)
+	fc.Result = res
+	return ec.marshalNCompanniaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCompanniaNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_compania(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CompanniaNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_CompanniaNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_CompanniaNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_CompanniaNode_fechamodificado(ctx, field)
+			case "usuariocrea":
+				return ec.fieldContext_CompanniaNode_usuariocrea(ctx, field)
+			case "nombre":
+				return ec.fieldContext_CompanniaNode_nombre(ctx, field)
+			case "pais":
+				return ec.fieldContext_CompanniaNode_pais(ctx, field)
+			case "empresaSet":
+				return ec.fieldContext_CompanniaNode_empresaSet(ctx, field)
+			case "count":
+				return ec.fieldContext_CompanniaNode_count(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CompanniaNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_nombre(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_nombre(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nombre, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_nombre(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_tarjeta(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_tarjeta(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tarjeta, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_tarjeta(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_aPagar(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_aPagar(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.APagar, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_aPagar(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_premium(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_premium(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Premium, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_premium(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_categoria(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_categoria(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Categoria, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.CategoriaNode)
+	fc.Result = res
+	return ec.marshalNCategoriaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCategoriaNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_categoria(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CategoriaNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_CategoriaNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_CategoriaNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_CategoriaNode_fechamodificado(ctx, field)
+			case "categoriaPadre":
+				return ec.fieldContext_CategoriaNode_categoriaPadre(ctx, field)
+			case "tipoCategoria":
+				return ec.fieldContext_CategoriaNode_tipoCategoria(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_CategoriaNode_descripcion(ctx, field)
+			case "imageDefault":
+				return ec.fieldContext_CategoriaNode_imageDefault(ctx, field)
+			case "descuento":
+				return ec.fieldContext_CategoriaNode_descuento(ctx, field)
+			case "codigoPais":
+				return ec.fieldContext_CategoriaNode_codigoPais(ctx, field)
+			case "codigoLetra":
+				return ec.fieldContext_CategoriaNode_codigoLetra(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoriaNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_latitud(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_latitud(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Latitud, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_latitud(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_longitud(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_longitud(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Longitud, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_longitud(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_movil(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_movil(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Movil, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_movil(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_urlweb(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_urlweb(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Urlweb, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_urlweb(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNode_referencia(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNode_referencia(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Referencia, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNode_referencia(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNodeConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNodeConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNodeConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*paging.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNodeConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNodeConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PageInfo_totalCount(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNodeConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNodeConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNodeConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.EmpresaNodeEdge)
+	fc.Result = res
+	return ec.marshalNEmpresaNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNodeEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNodeConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNodeConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "cursor":
+				return ec.fieldContext_EmpresaNodeEdge_cursor(ctx, field)
+			case "node":
+				return ec.fieldContext_EmpresaNodeEdge_node(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EmpresaNodeEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNodeEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNodeEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNodeEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNodeEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNodeEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmpresaNodeEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.EmpresaNodeEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_EmpresaNodeEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.EmpresaNode)
+	fc.Result = res
+	return ec.marshalOEmpresaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_EmpresaNodeEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmpresaNodeEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_EmpresaNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_EmpresaNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_EmpresaNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_EmpresaNode_fechamodificado(ctx, field)
+			case "usuariocrea":
+				return ec.fieldContext_EmpresaNode_usuariocrea(ctx, field)
+			case "compania":
+				return ec.fieldContext_EmpresaNode_compania(ctx, field)
+			case "nombre":
+				return ec.fieldContext_EmpresaNode_nombre(ctx, field)
+			case "tarjeta":
+				return ec.fieldContext_EmpresaNode_tarjeta(ctx, field)
+			case "aPagar":
+				return ec.fieldContext_EmpresaNode_aPagar(ctx, field)
+			case "premium":
+				return ec.fieldContext_EmpresaNode_premium(ctx, field)
+			case "categoria":
+				return ec.fieldContext_EmpresaNode_categoria(ctx, field)
+			case "latitud":
+				return ec.fieldContext_EmpresaNode_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_EmpresaNode_longitud(ctx, field)
+			case "movil":
+				return ec.fieldContext_EmpresaNode_movil(ctx, field)
+			case "urlweb":
+				return ec.fieldContext_EmpresaNode_urlweb(ctx, field)
+			case "referencia":
+				return ec.fieldContext_EmpresaNode_referencia(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EmpresaNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NomProductoNode_id(ctx context.Context, field graphql.CollectedField, obj *model.NomProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NomProductoNode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NomProductoNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NomProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NomProductoNode_estado(ctx context.Context, field graphql.CollectedField, obj *model.NomProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NomProductoNode_estado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Estado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NomProductoNode_estado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NomProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NomProductoNode_fechacreado(ctx context.Context, field graphql.CollectedField, obj *model.NomProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NomProductoNode_fechacreado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechacreado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NomProductoNode_fechacreado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NomProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NomProductoNode_fechamodificado(ctx context.Context, field graphql.CollectedField, obj *model.NomProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NomProductoNode_fechamodificado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechamodificado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NomProductoNode_fechamodificado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NomProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NomProductoNode_tipo(ctx context.Context, field graphql.CollectedField, obj *model.NomProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NomProductoNode_tipo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tipo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NomProductoNode_tipo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NomProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NomProductoNode_descripcion(ctx context.Context, field graphql.CollectedField, obj *model.NomProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NomProductoNode_descripcion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Descripcion, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NomProductoNode_descripcion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NomProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NomProductoNode_propiedades(ctx context.Context, field graphql.CollectedField, obj *model.NomProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NomProductoNode_propiedades(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Propiedades, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PropiedadProdNodeConnection)
+	fc.Result = res
+	return ec.marshalNPropiedadProdNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdNodeConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NomProductoNode_propiedades(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NomProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "pageInfo":
+				return ec.fieldContext_PropiedadProdNodeConnection_pageInfo(ctx, field)
+			case "edges":
+				return ec.fieldContext_PropiedadProdNodeConnection_edges(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PropiedadProdNodeConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_NomProductoNode_propiedades_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NomProductoNode_productoSet(ctx context.Context, field graphql.CollectedField, obj *model.NomProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NomProductoNode_productoSet(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProductoSet, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ProductoNodeConnection)
+	fc.Result = res
+	return ec.marshalNProductoNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNodeConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NomProductoNode_productoSet(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NomProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "pageInfo":
+				return ec.fieldContext_ProductoNodeConnection_pageInfo(ctx, field)
+			case "edges":
+				return ec.fieldContext_ProductoNodeConnection_edges(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProductoNodeConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_NomProductoNode_productoSet_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -1695,6 +4635,1622 @@ func (ec *executionContext) fieldContext_PageInfo_endCursor(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _ProductoNode_id(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_estado(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_estado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Estado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_estado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_fechacreado(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_fechacreado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechacreado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_fechacreado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_fechamodificado(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_fechamodificado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechamodificado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_fechamodificado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_usuariocrea(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_usuariocrea(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Usuariocrea, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_usuariocrea(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_codigo(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_codigo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Codigo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_codigo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_descripcionCompleta(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_descripcionCompleta(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DescripcionCompleta, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_descripcionCompleta(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_preciocompra(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_preciocompra(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Preciocompra, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_preciocompra(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_precioventa(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_precioventa(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Precioventa, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_precioventa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_cantidad(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_cantidad(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cantidad, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_cantidad(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_lote(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_lote(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Lote, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_lote(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_visible(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_visible(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Visible, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_visible(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_descuento(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_descuento(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Descuento, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_descuento(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_latitud(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_latitud(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Latitud, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_latitud(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_longitud(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_longitud(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Longitud, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_longitud(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_destacado(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_destacado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Destacado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_destacado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_descripcion(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_descripcion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Descripcion, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.NomProductoNode)
+	fc.Result = res
+	return ec.marshalNNomProductoNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐNomProductoNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_descripcion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_NomProductoNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_NomProductoNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_NomProductoNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_NomProductoNode_fechamodificado(ctx, field)
+			case "tipo":
+				return ec.fieldContext_NomProductoNode_tipo(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_NomProductoNode_descripcion(ctx, field)
+			case "propiedades":
+				return ec.fieldContext_NomProductoNode_propiedades(ctx, field)
+			case "productoSet":
+				return ec.fieldContext_NomProductoNode_productoSet(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NomProductoNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_empresa(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_empresa(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Empresa, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.EmpresaNode)
+	fc.Result = res
+	return ec.marshalNEmpresaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_empresa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_EmpresaNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_EmpresaNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_EmpresaNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_EmpresaNode_fechamodificado(ctx, field)
+			case "usuariocrea":
+				return ec.fieldContext_EmpresaNode_usuariocrea(ctx, field)
+			case "compania":
+				return ec.fieldContext_EmpresaNode_compania(ctx, field)
+			case "nombre":
+				return ec.fieldContext_EmpresaNode_nombre(ctx, field)
+			case "tarjeta":
+				return ec.fieldContext_EmpresaNode_tarjeta(ctx, field)
+			case "aPagar":
+				return ec.fieldContext_EmpresaNode_aPagar(ctx, field)
+			case "premium":
+				return ec.fieldContext_EmpresaNode_premium(ctx, field)
+			case "categoria":
+				return ec.fieldContext_EmpresaNode_categoria(ctx, field)
+			case "latitud":
+				return ec.fieldContext_EmpresaNode_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_EmpresaNode_longitud(ctx, field)
+			case "movil":
+				return ec.fieldContext_EmpresaNode_movil(ctx, field)
+			case "urlweb":
+				return ec.fieldContext_EmpresaNode_urlweb(ctx, field)
+			case "referencia":
+				return ec.fieldContext_EmpresaNode_referencia(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EmpresaNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNode_count(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNode_count(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Count, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNode_count(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNodeConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNodeConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNodeConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*paging.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNodeConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNodeConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PageInfo_totalCount(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNodeConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNodeConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNodeConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.ProductoNodeEdge)
+	fc.Result = res
+	return ec.marshalNProductoNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNodeEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNodeConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNodeConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "cursor":
+				return ec.fieldContext_ProductoNodeEdge_cursor(ctx, field)
+			case "node":
+				return ec.fieldContext_ProductoNodeEdge_node(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProductoNodeEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNodeEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNodeEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNodeEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNodeEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNodeEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProductoNodeEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.ProductoNodeEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ProductoNodeEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ProductoNode)
+	fc.Result = res
+	return ec.marshalOProductoNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ProductoNodeEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProductoNodeEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProductoNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_ProductoNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_ProductoNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_ProductoNode_fechamodificado(ctx, field)
+			case "usuariocrea":
+				return ec.fieldContext_ProductoNode_usuariocrea(ctx, field)
+			case "codigo":
+				return ec.fieldContext_ProductoNode_codigo(ctx, field)
+			case "descripcionCompleta":
+				return ec.fieldContext_ProductoNode_descripcionCompleta(ctx, field)
+			case "preciocompra":
+				return ec.fieldContext_ProductoNode_preciocompra(ctx, field)
+			case "precioventa":
+				return ec.fieldContext_ProductoNode_precioventa(ctx, field)
+			case "cantidad":
+				return ec.fieldContext_ProductoNode_cantidad(ctx, field)
+			case "lote":
+				return ec.fieldContext_ProductoNode_lote(ctx, field)
+			case "visible":
+				return ec.fieldContext_ProductoNode_visible(ctx, field)
+			case "descuento":
+				return ec.fieldContext_ProductoNode_descuento(ctx, field)
+			case "latitud":
+				return ec.fieldContext_ProductoNode_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_ProductoNode_longitud(ctx, field)
+			case "destacado":
+				return ec.fieldContext_ProductoNode_destacado(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_ProductoNode_descripcion(ctx, field)
+			case "empresa":
+				return ec.fieldContext_ProductoNode_empresa(ctx, field)
+			case "count":
+				return ec.fieldContext_ProductoNode_count(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProductoNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNode_id(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNode_estado(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNode_estado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Estado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNode_estado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNode_fechacreado(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNode_fechacreado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechacreado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNode_fechacreado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNode_fechamodificado(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNode_fechamodificado(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fechamodificado, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNDateTime2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNode_fechamodificado(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type DateTime does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNode_usuariocrea(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNode_usuariocrea(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Usuariocrea, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNode_usuariocrea(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNode_tipo(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNode_tipo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tipo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.PropiedadProdTipo)
+	fc.Result = res
+	return ec.marshalNPropiedadProdTipo2githubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdTipo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNode_tipo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type PropiedadProdTipo does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNode_descripcion(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNode_descripcion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Descripcion, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNode_descripcion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNodeConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNodeConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNodeConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*paging.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNodeConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNodeConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PageInfo_totalCount(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNodeConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNodeConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNodeConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.PropiedadProdNodeEdge)
+	fc.Result = res
+	return ec.marshalNPropiedadProdNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdNodeEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNodeConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNodeConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "cursor":
+				return ec.fieldContext_PropiedadProdNodeEdge_cursor(ctx, field)
+			case "node":
+				return ec.fieldContext_PropiedadProdNodeEdge_node(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PropiedadProdNodeEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNodeEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNodeEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNodeEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNodeEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNodeEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PropiedadProdNodeEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.PropiedadProdNodeEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PropiedadProdNodeEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.PropiedadProdNode)
+	fc.Result = res
+	return ec.marshalOPropiedadProdNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PropiedadProdNodeEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PropiedadProdNodeEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_PropiedadProdNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_PropiedadProdNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_PropiedadProdNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_PropiedadProdNode_fechamodificado(ctx, field)
+			case "usuariocrea":
+				return ec.fieldContext_PropiedadProdNode_usuariocrea(ctx, field)
+			case "tipo":
+				return ec.fieldContext_PropiedadProdNode_tipo(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_PropiedadProdNode_descripcion(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PropiedadProdNode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_users(ctx, field)
 	if err != nil {
@@ -1756,8 +6312,8 @@ func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_allCategorias(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_allCategorias(ctx, field)
+func (ec *executionContext) _Query_categoria(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_categoria(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1770,7 +6326,83 @@ func (ec *executionContext) _Query_allCategorias(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().AllCategorias(rctx, fc.Args["before"].(*string), fc.Args["after"].(*string), fc.Args["first"].(*int), fc.Args["last"].(*int), fc.Args["descripcion"].(*string), fc.Args["descripcion_Icontains"].(*string), fc.Args["tipoCategoria_Nombre"].(*string), fc.Args["tipoCategoria_Nombre_Icontains"].(*string), fc.Args["tipoCategoria_Abrev"].(*string), fc.Args["tipoCategoria_Sub"].(*string), fc.Args["tipoCategoria_Id"].(*string), fc.Args["categoriaPadre_Id"].(*string), fc.Args["codigoPais"].(*string), fc.Args["codigoLetra"].(*string), fc.Args["id"].(*string))
+		return ec.resolvers.Query().Categoria(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.CategoriaNode)
+	fc.Result = res
+	return ec.marshalOCategoriaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCategoriaNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_categoria(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CategoriaNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_CategoriaNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_CategoriaNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_CategoriaNode_fechamodificado(ctx, field)
+			case "categoriaPadre":
+				return ec.fieldContext_CategoriaNode_categoriaPadre(ctx, field)
+			case "tipoCategoria":
+				return ec.fieldContext_CategoriaNode_tipoCategoria(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_CategoriaNode_descripcion(ctx, field)
+			case "imageDefault":
+				return ec.fieldContext_CategoriaNode_imageDefault(ctx, field)
+			case "descuento":
+				return ec.fieldContext_CategoriaNode_descuento(ctx, field)
+			case "codigoPais":
+				return ec.fieldContext_CategoriaNode_codigoPais(ctx, field)
+			case "codigoLetra":
+				return ec.fieldContext_CategoriaNode_codigoLetra(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoriaNode", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_categoria_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_categorias(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_categorias(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Categorias(rctx, fc.Args["page"].(*paging.PageArgs), fc.Args["input"].(*model.AllCategoriasInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1784,7 +6416,7 @@ func (ec *executionContext) _Query_allCategorias(ctx context.Context, field grap
 	return ec.marshalOCategoriaNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCategoriaNodeConnection(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_allCategorias(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_categorias(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -1807,7 +6439,157 @@ func (ec *executionContext) fieldContext_Query_allCategorias(ctx context.Context
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_allCategorias_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_categorias_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_producto(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_producto(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Producto(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ProductoNode)
+	fc.Result = res
+	return ec.marshalOProductoNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_producto(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_ProductoNode_id(ctx, field)
+			case "estado":
+				return ec.fieldContext_ProductoNode_estado(ctx, field)
+			case "fechacreado":
+				return ec.fieldContext_ProductoNode_fechacreado(ctx, field)
+			case "fechamodificado":
+				return ec.fieldContext_ProductoNode_fechamodificado(ctx, field)
+			case "usuariocrea":
+				return ec.fieldContext_ProductoNode_usuariocrea(ctx, field)
+			case "codigo":
+				return ec.fieldContext_ProductoNode_codigo(ctx, field)
+			case "descripcionCompleta":
+				return ec.fieldContext_ProductoNode_descripcionCompleta(ctx, field)
+			case "preciocompra":
+				return ec.fieldContext_ProductoNode_preciocompra(ctx, field)
+			case "precioventa":
+				return ec.fieldContext_ProductoNode_precioventa(ctx, field)
+			case "cantidad":
+				return ec.fieldContext_ProductoNode_cantidad(ctx, field)
+			case "lote":
+				return ec.fieldContext_ProductoNode_lote(ctx, field)
+			case "visible":
+				return ec.fieldContext_ProductoNode_visible(ctx, field)
+			case "descuento":
+				return ec.fieldContext_ProductoNode_descuento(ctx, field)
+			case "latitud":
+				return ec.fieldContext_ProductoNode_latitud(ctx, field)
+			case "longitud":
+				return ec.fieldContext_ProductoNode_longitud(ctx, field)
+			case "destacado":
+				return ec.fieldContext_ProductoNode_destacado(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_ProductoNode_descripcion(ctx, field)
+			case "empresa":
+				return ec.fieldContext_ProductoNode_empresa(ctx, field)
+			case "count":
+				return ec.fieldContext_ProductoNode_count(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProductoNode", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_producto_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_productos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_productos(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Productos(rctx, fc.Args["page"].(*paging.PageArgs), fc.Args["input"].(*model.ProductoInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ProductoNodeConnection)
+	fc.Result = res
+	return ec.marshalOProductoNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNodeConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_productos(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "pageInfo":
+				return ec.fieldContext_ProductoNodeConnection_pageInfo(ctx, field)
+			case "edges":
+				return ec.fieldContext_ProductoNodeConnection_edges(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ProductoNodeConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_productos_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -1943,6 +6725,50 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _TipoCategoriaNode_id(ctx context.Context, field graphql.CollectedField, obj *model.TipoCategoriaNode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TipoCategoriaNode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TipoCategoriaNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TipoCategoriaNode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _TipoCategoriaNode_estado(ctx context.Context, field graphql.CollectedField, obj *model.TipoCategoriaNode) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_TipoCategoriaNode_estado(ctx, field)
 	if err != nil {
@@ -2070,50 +6896,6 @@ func (ec *executionContext) fieldContext_TipoCategoriaNode_fechamodificado(ctx c
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type DateTime does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TipoCategoriaNode_id(ctx context.Context, field graphql.CollectedField, obj *model.TipoCategoriaNode) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TipoCategoriaNode_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TipoCategoriaNode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TipoCategoriaNode",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4352,6 +9134,258 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputAllCategoriasInput(ctx context.Context, obj interface{}) (model.AllCategoriasInput, error) {
+	var it model.AllCategoriasInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "descripcion", "descripcionContains", "tipoCategoriaNombre", "tipoCategoriaNombreContains", "tipoCategoriaAbrev", "tipoCategoriaSub", "tipoCategoriaId", "categoriaPadreId", "codigoPais", "codigoLetra"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion"))
+			it.Descripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcionContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcionContains"))
+			it.DescripcionContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipoCategoriaNombre":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoriaNombre"))
+			it.TipoCategoriaNombre, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipoCategoriaNombreContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoriaNombreContains"))
+			it.TipoCategoriaNombreContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipoCategoriaAbrev":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoriaAbrev"))
+			it.TipoCategoriaAbrev, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipoCategoriaSub":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoriaSub"))
+			it.TipoCategoriaSub, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipoCategoriaId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipoCategoriaId"))
+			it.TipoCategoriaID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "categoriaPadreId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoriaPadreId"))
+			it.CategoriaPadreID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "codigoPais":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("codigoPais"))
+			it.CodigoPais, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "codigoLetra":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("codigoLetra"))
+			it.CodigoLetra, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputArticleSetInput(ctx context.Context, obj interface{}) (model.ArticleSetInput, error) {
+	var it model.ArticleSetInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "title_Icontains", "title_Istartswith", "content", "content_Icontains", "business", "business_Nombre", "business_Nombre_Icontains"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			it.Title, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "title_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title_Icontains"))
+			it.TitleIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "title_Istartswith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title_Istartswith"))
+			it.TitleIstartswith, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "content":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
+			it.Content, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "content_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content_Icontains"))
+			it.ContentIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "business":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("business"))
+			it.Business, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "business_Nombre":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("business_Nombre"))
+			it.BusinessNombre, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "business_Nombre_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("business_Nombre_Icontains"))
+			it.BusinessNombreIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputEmpresaSetInput(ctx context.Context, obj interface{}) (model.EmpresaSetInput, error) {
+	var it model.EmpresaSetInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "categoria_Id", "nombre", "nombre_Icontains", "nombre_Istartswith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "categoria_Id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoria_Id"))
+			it.CategoriaID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nombre"))
+			it.Nombre, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nombre_Icontains"))
+			it.NombreIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre_Istartswith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nombre_Istartswith"))
+			it.NombreIstartswith, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputPageArgs(ctx context.Context, obj interface{}) (paging.PageArgs, error) {
 	var it paging.PageArgs
 	asMap := map[string]interface{}{}
@@ -4359,7 +9393,7 @@ func (ec *executionContext) unmarshalInputPageArgs(ctx context.Context, obj inte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"first", "after"}
+	fieldsInOrder := [...]string{"first", "last", "before", "after"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -4374,11 +9408,513 @@ func (ec *executionContext) unmarshalInputPageArgs(ctx context.Context, obj inte
 			if err != nil {
 				return it, err
 			}
+		case "last":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.PageArgs().Last(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "before":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.PageArgs().Before(ctx, &it, data); err != nil {
+				return it, err
+			}
 		case "after":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
 			it.After, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputPersonSetInput(ctx context.Context, obj interface{}) (model.PersonSetInput, error) {
+	var it model.PersonSetInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"firstName", "firstName_Icontains", "firstName_Istartswith", "lastName", "lastName_Icontains"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "firstName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstName"))
+			it.FirstName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "firstName_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstName_Icontains"))
+			it.FirstNameIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "firstName_Istartswith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstName_Istartswith"))
+			it.FirstNameIstartswith, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "lastName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastName"))
+			it.LastName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "lastName_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastName_Icontains"))
+			it.LastNameIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputProductoInput(ctx context.Context, obj interface{}) (model.ProductoInput, error) {
+	var it model.ProductoInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"destacado", "destacado_Icontains", "descripcion_Descripcion", "descripcion_Descripcion_Icontains", "descripcion_Descripcion_Istartswith", "descripcion_Subcategoria_Descripcion", "descripcion_Subcategoria_Descripcion_Icontains", "descripcion_Subcategoria_Categoria", "descripcion_Subcategoria_Id", "descripcion_Subcategoria_Categoria_Descripcion", "descripcion_Subcategoria_Categoria_Descripcion_Icontains", "marca", "marca_Descripcion", "marca_Descripcion_Icontains", "empresa", "empresa_Nombre", "empresa_Nombre_Icontains"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "destacado":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("destacado"))
+			it.Destacado, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "destacado_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("destacado_Icontains"))
+			it.DestacadoIcontains, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Descripcion"))
+			it.DescripcionDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Descripcion_Icontains"))
+			it.DescripcionDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Descripcion_Istartswith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Descripcion_Istartswith"))
+			it.DescripcionDescripcionIstartswith, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Descripcion"))
+			it.DescripcionSubcategoriaDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Descripcion_Icontains"))
+			it.DescripcionSubcategoriaDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Categoria":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Categoria"))
+			it.DescripcionSubcategoriaCategoria, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Id"))
+			it.DescripcionSubcategoriaID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Categoria_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Categoria_Descripcion"))
+			it.DescripcionSubcategoriaCategoriaDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Categoria_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Categoria_Descripcion_Icontains"))
+			it.DescripcionSubcategoriaCategoriaDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "marca":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("marca"))
+			it.Marca, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "marca_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("marca_Descripcion"))
+			it.MarcaDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "marca_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("marca_Descripcion_Icontains"))
+			it.MarcaDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "empresa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("empresa"))
+			it.Empresa, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "empresa_Nombre":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("empresa_Nombre"))
+			it.EmpresaNombre, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "empresa_Nombre_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("empresa_Nombre_Icontains"))
+			it.EmpresaNombreIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputProductoMSetInput(ctx context.Context, obj interface{}) (model.ProductoMSetInput, error) {
+	var it model.ProductoMSetInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"seccion_Categoria_Id", "seccion_Categoria_Id_Icontains", "seccion_Categoria_Id_Istartswith", "seccion_Categoria_Descripcion", "seccion_Categoria_Descripcion_Icontains", "presentacion_Categoria", "presentacion_Categoria_Descripcion", "presentacion_Categoria_Descripcion_Icontains", "tipopeso_Categoria", "tipopeso_Categoria_Descripcion", "tipopeso_Categoria_Descripcion_Icontains", "producto_Descripcion", "producto_Descripcion_Icontains", "producto_Descripcion_Istartswith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "seccion_Categoria_Id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seccion_Categoria_Id"))
+			it.SeccionCategoriaID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seccion_Categoria_Id_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seccion_Categoria_Id_Icontains"))
+			it.SeccionCategoriaIDIcontains, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seccion_Categoria_Id_Istartswith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seccion_Categoria_Id_Istartswith"))
+			it.SeccionCategoriaIDIstartswith, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seccion_Categoria_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seccion_Categoria_Descripcion"))
+			it.SeccionCategoriaDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seccion_Categoria_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seccion_Categoria_Descripcion_Icontains"))
+			it.SeccionCategoriaDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "presentacion_Categoria":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("presentacion_Categoria"))
+			it.PresentacionCategoria, err = ec.unmarshalOID2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "presentacion_Categoria_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("presentacion_Categoria_Descripcion"))
+			it.PresentacionCategoriaDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "presentacion_Categoria_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("presentacion_Categoria_Descripcion_Icontains"))
+			it.PresentacionCategoriaDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipopeso_Categoria":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipopeso_Categoria"))
+			it.TipopesoCategoria, err = ec.unmarshalOID2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipopeso_Categoria_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipopeso_Categoria_Descripcion"))
+			it.TipopesoCategoriaDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipopeso_Categoria_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tipopeso_Categoria_Descripcion_Icontains"))
+			it.TipopesoCategoriaDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "producto_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("producto_Descripcion"))
+			it.ProductoDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "producto_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("producto_Descripcion_Icontains"))
+			it.ProductoDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "producto_Descripcion_Istartswith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("producto_Descripcion_Istartswith"))
+			it.ProductoDescripcionIstartswith, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputServicioSetInput(ctx context.Context, obj interface{}) (model.ServicioSetInput, error) {
+	var it model.ServicioSetInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"destacado", "destacado_Icontains", "descripcion_Descripcion", "descripcion_Descripcion_Icontains", "descripcion_Descripcion_Istartswith", "descripcion_Subcategoria_Id", "descripcion_Subcategoria_Descripcion", "descripcion_Subcategoria_Descripcion_Icontains", "descripcion_Subcategoria_Categoria", "descripcion_Subcategoria_Categoria_Descripcion", "descripcion_Subcategoria_Categoria_Descripcion_Icontains", "empresa", "empresa_Nombre", "empresa_Nombre_Icontains"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "destacado":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("destacado"))
+			it.Destacado, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "destacado_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("destacado_Icontains"))
+			it.DestacadoIcontains, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Descripcion"))
+			it.DescripcionDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Descripcion_Icontains"))
+			it.DescripcionDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Descripcion_Istartswith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Descripcion_Istartswith"))
+			it.DescripcionDescripcionIstartswith, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Id"))
+			it.DescripcionSubcategoriaID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Descripcion"))
+			it.DescripcionSubcategoriaDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Descripcion_Icontains"))
+			it.DescripcionSubcategoriaDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Categoria":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Categoria"))
+			it.DescripcionSubcategoriaCategoria, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Categoria_Descripcion":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Categoria_Descripcion"))
+			it.DescripcionSubcategoriaCategoriaDescripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion_Subcategoria_Categoria_Descripcion_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descripcion_Subcategoria_Categoria_Descripcion_Icontains"))
+			it.DescripcionSubcategoriaCategoriaDescripcionIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "empresa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("empresa"))
+			it.Empresa, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "empresa_Nombre":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("empresa_Nombre"))
+			it.EmpresaNombre, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "empresa_Nombre_Icontains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("empresa_Nombre_Icontains"))
+			it.EmpresaNombreIcontains, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4406,6 +9942,13 @@ func (ec *executionContext) _CategoriaNode(ctx context.Context, sel ast.Selectio
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("CategoriaNode")
+		case "id":
+
+			out.Values[i] = ec._CategoriaNode_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "estado":
 
 			out.Values[i] = ec._CategoriaNode_estado(ctx, field, obj)
@@ -4423,13 +9966,6 @@ func (ec *executionContext) _CategoriaNode(ctx context.Context, sel ast.Selectio
 		case "fechamodificado":
 
 			out.Values[i] = ec._CategoriaNode_fechamodificado(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "id":
-
-			out.Values[i] = ec._CategoriaNode_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -4541,6 +10077,422 @@ func (ec *executionContext) _CategoriaNodeEdge(ctx context.Context, sel ast.Sele
 
 			out.Values[i] = ec._CategoriaNodeEdge_node(ctx, field, obj)
 
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var companniaNodeImplementors = []string{"CompanniaNode"}
+
+func (ec *executionContext) _CompanniaNode(ctx context.Context, sel ast.SelectionSet, obj *model.CompanniaNode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, companniaNodeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CompanniaNode")
+		case "id":
+
+			out.Values[i] = ec._CompanniaNode_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "estado":
+
+			out.Values[i] = ec._CompanniaNode_estado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechacreado":
+
+			out.Values[i] = ec._CompanniaNode_fechacreado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechamodificado":
+
+			out.Values[i] = ec._CompanniaNode_fechamodificado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "usuariocrea":
+
+			out.Values[i] = ec._CompanniaNode_usuariocrea(ctx, field, obj)
+
+		case "nombre":
+
+			out.Values[i] = ec._CompanniaNode_nombre(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "pais":
+
+			out.Values[i] = ec._CompanniaNode_pais(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "empresaSet":
+
+			out.Values[i] = ec._CompanniaNode_empresaSet(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "count":
+
+			out.Values[i] = ec._CompanniaNode_count(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var companniaNodeConnectionImplementors = []string{"CompanniaNodeConnection"}
+
+func (ec *executionContext) _CompanniaNodeConnection(ctx context.Context, sel ast.SelectionSet, obj *model.CompanniaNodeConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, companniaNodeConnectionImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CompanniaNodeConnection")
+		case "pageInfo":
+
+			out.Values[i] = ec._CompanniaNodeConnection_pageInfo(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "edges":
+
+			out.Values[i] = ec._CompanniaNodeConnection_edges(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var companniaNodeEdgeImplementors = []string{"CompanniaNodeEdge"}
+
+func (ec *executionContext) _CompanniaNodeEdge(ctx context.Context, sel ast.SelectionSet, obj *model.CompanniaNodeEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, companniaNodeEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CompanniaNodeEdge")
+		case "cursor":
+
+			out.Values[i] = ec._CompanniaNodeEdge_cursor(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "node":
+
+			out.Values[i] = ec._CompanniaNodeEdge_node(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var empresaNodeImplementors = []string{"EmpresaNode"}
+
+func (ec *executionContext) _EmpresaNode(ctx context.Context, sel ast.SelectionSet, obj *model.EmpresaNode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, empresaNodeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EmpresaNode")
+		case "id":
+
+			out.Values[i] = ec._EmpresaNode_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "estado":
+
+			out.Values[i] = ec._EmpresaNode_estado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechacreado":
+
+			out.Values[i] = ec._EmpresaNode_fechacreado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechamodificado":
+
+			out.Values[i] = ec._EmpresaNode_fechamodificado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "usuariocrea":
+
+			out.Values[i] = ec._EmpresaNode_usuariocrea(ctx, field, obj)
+
+		case "compania":
+
+			out.Values[i] = ec._EmpresaNode_compania(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "nombre":
+
+			out.Values[i] = ec._EmpresaNode_nombre(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "tarjeta":
+
+			out.Values[i] = ec._EmpresaNode_tarjeta(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "aPagar":
+
+			out.Values[i] = ec._EmpresaNode_aPagar(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "premium":
+
+			out.Values[i] = ec._EmpresaNode_premium(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "categoria":
+
+			out.Values[i] = ec._EmpresaNode_categoria(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "latitud":
+
+			out.Values[i] = ec._EmpresaNode_latitud(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "longitud":
+
+			out.Values[i] = ec._EmpresaNode_longitud(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "movil":
+
+			out.Values[i] = ec._EmpresaNode_movil(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "urlweb":
+
+			out.Values[i] = ec._EmpresaNode_urlweb(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "referencia":
+
+			out.Values[i] = ec._EmpresaNode_referencia(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var empresaNodeConnectionImplementors = []string{"EmpresaNodeConnection"}
+
+func (ec *executionContext) _EmpresaNodeConnection(ctx context.Context, sel ast.SelectionSet, obj *model.EmpresaNodeConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, empresaNodeConnectionImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EmpresaNodeConnection")
+		case "pageInfo":
+
+			out.Values[i] = ec._EmpresaNodeConnection_pageInfo(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "edges":
+
+			out.Values[i] = ec._EmpresaNodeConnection_edges(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var empresaNodeEdgeImplementors = []string{"EmpresaNodeEdge"}
+
+func (ec *executionContext) _EmpresaNodeEdge(ctx context.Context, sel ast.SelectionSet, obj *model.EmpresaNodeEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, empresaNodeEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EmpresaNodeEdge")
+		case "cursor":
+
+			out.Values[i] = ec._EmpresaNodeEdge_cursor(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "node":
+
+			out.Values[i] = ec._EmpresaNodeEdge_node(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var nomProductoNodeImplementors = []string{"NomProductoNode"}
+
+func (ec *executionContext) _NomProductoNode(ctx context.Context, sel ast.SelectionSet, obj *model.NomProductoNode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, nomProductoNodeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NomProductoNode")
+		case "id":
+
+			out.Values[i] = ec._NomProductoNode_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "estado":
+
+			out.Values[i] = ec._NomProductoNode_estado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechacreado":
+
+			out.Values[i] = ec._NomProductoNode_fechacreado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechamodificado":
+
+			out.Values[i] = ec._NomProductoNode_fechamodificado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "tipo":
+
+			out.Values[i] = ec._NomProductoNode_tipo(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "descripcion":
+
+			out.Values[i] = ec._NomProductoNode_descripcion(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "propiedades":
+
+			out.Values[i] = ec._NomProductoNode_propiedades(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "productoSet":
+
+			out.Values[i] = ec._NomProductoNode_productoSet(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4664,6 +10616,346 @@ func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
+var productoNodeImplementors = []string{"ProductoNode"}
+
+func (ec *executionContext) _ProductoNode(ctx context.Context, sel ast.SelectionSet, obj *model.ProductoNode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, productoNodeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProductoNode")
+		case "id":
+
+			out.Values[i] = ec._ProductoNode_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "estado":
+
+			out.Values[i] = ec._ProductoNode_estado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechacreado":
+
+			out.Values[i] = ec._ProductoNode_fechacreado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechamodificado":
+
+			out.Values[i] = ec._ProductoNode_fechamodificado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "usuariocrea":
+
+			out.Values[i] = ec._ProductoNode_usuariocrea(ctx, field, obj)
+
+		case "codigo":
+
+			out.Values[i] = ec._ProductoNode_codigo(ctx, field, obj)
+
+		case "descripcionCompleta":
+
+			out.Values[i] = ec._ProductoNode_descripcionCompleta(ctx, field, obj)
+
+		case "preciocompra":
+
+			out.Values[i] = ec._ProductoNode_preciocompra(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "precioventa":
+
+			out.Values[i] = ec._ProductoNode_precioventa(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "cantidad":
+
+			out.Values[i] = ec._ProductoNode_cantidad(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "lote":
+
+			out.Values[i] = ec._ProductoNode_lote(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "visible":
+
+			out.Values[i] = ec._ProductoNode_visible(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "descuento":
+
+			out.Values[i] = ec._ProductoNode_descuento(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "latitud":
+
+			out.Values[i] = ec._ProductoNode_latitud(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "longitud":
+
+			out.Values[i] = ec._ProductoNode_longitud(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "destacado":
+
+			out.Values[i] = ec._ProductoNode_destacado(ctx, field, obj)
+
+		case "descripcion":
+
+			out.Values[i] = ec._ProductoNode_descripcion(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "empresa":
+
+			out.Values[i] = ec._ProductoNode_empresa(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "count":
+
+			out.Values[i] = ec._ProductoNode_count(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var productoNodeConnectionImplementors = []string{"ProductoNodeConnection"}
+
+func (ec *executionContext) _ProductoNodeConnection(ctx context.Context, sel ast.SelectionSet, obj *model.ProductoNodeConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, productoNodeConnectionImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProductoNodeConnection")
+		case "pageInfo":
+
+			out.Values[i] = ec._ProductoNodeConnection_pageInfo(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "edges":
+
+			out.Values[i] = ec._ProductoNodeConnection_edges(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var productoNodeEdgeImplementors = []string{"ProductoNodeEdge"}
+
+func (ec *executionContext) _ProductoNodeEdge(ctx context.Context, sel ast.SelectionSet, obj *model.ProductoNodeEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, productoNodeEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProductoNodeEdge")
+		case "cursor":
+
+			out.Values[i] = ec._ProductoNodeEdge_cursor(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "node":
+
+			out.Values[i] = ec._ProductoNodeEdge_node(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var propiedadProdNodeImplementors = []string{"PropiedadProdNode"}
+
+func (ec *executionContext) _PropiedadProdNode(ctx context.Context, sel ast.SelectionSet, obj *model.PropiedadProdNode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, propiedadProdNodeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PropiedadProdNode")
+		case "id":
+
+			out.Values[i] = ec._PropiedadProdNode_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "estado":
+
+			out.Values[i] = ec._PropiedadProdNode_estado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechacreado":
+
+			out.Values[i] = ec._PropiedadProdNode_fechacreado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fechamodificado":
+
+			out.Values[i] = ec._PropiedadProdNode_fechamodificado(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "usuariocrea":
+
+			out.Values[i] = ec._PropiedadProdNode_usuariocrea(ctx, field, obj)
+
+		case "tipo":
+
+			out.Values[i] = ec._PropiedadProdNode_tipo(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "descripcion":
+
+			out.Values[i] = ec._PropiedadProdNode_descripcion(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var propiedadProdNodeConnectionImplementors = []string{"PropiedadProdNodeConnection"}
+
+func (ec *executionContext) _PropiedadProdNodeConnection(ctx context.Context, sel ast.SelectionSet, obj *model.PropiedadProdNodeConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, propiedadProdNodeConnectionImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PropiedadProdNodeConnection")
+		case "pageInfo":
+
+			out.Values[i] = ec._PropiedadProdNodeConnection_pageInfo(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "edges":
+
+			out.Values[i] = ec._PropiedadProdNodeConnection_edges(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var propiedadProdNodeEdgeImplementors = []string{"PropiedadProdNodeEdge"}
+
+func (ec *executionContext) _PropiedadProdNodeEdge(ctx context.Context, sel ast.SelectionSet, obj *model.PropiedadProdNodeEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, propiedadProdNodeEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PropiedadProdNodeEdge")
+		case "cursor":
+
+			out.Values[i] = ec._PropiedadProdNodeEdge_cursor(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "node":
+
+			out.Values[i] = ec._PropiedadProdNodeEdge_node(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -4706,7 +10998,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "allCategorias":
+		case "categoria":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -4715,7 +11007,67 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_allCategorias(ctx, field)
+				res = ec._Query_categoria(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "categorias":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_categorias(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "producto":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_producto(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "productos":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_productos(ctx, field)
 				return res
 			}
 
@@ -4759,6 +11111,13 @@ func (ec *executionContext) _TipoCategoriaNode(ctx context.Context, sel ast.Sele
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TipoCategoriaNode")
+		case "id":
+
+			out.Values[i] = ec._TipoCategoriaNode_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "estado":
 
 			out.Values[i] = ec._TipoCategoriaNode_estado(ctx, field, obj)
@@ -4776,13 +11135,6 @@ func (ec *executionContext) _TipoCategoriaNode(ctx context.Context, sel ast.Sele
 		case "fechamodificado":
 
 			out.Values[i] = ec._TipoCategoriaNode_fechamodificado(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "id":
-
-			out.Values[i] = ec._TipoCategoriaNode_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -5252,6 +11604,16 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNCategoriaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCategoriaNode(ctx context.Context, sel ast.SelectionSet, v *model.CategoriaNode) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CategoriaNode(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNCategoriaNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCategoriaNodeEdge(ctx context.Context, sel ast.SelectionSet, v []*model.CategoriaNodeEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -5290,6 +11652,54 @@ func (ec *executionContext) marshalNCategoriaNodeEdge2ᚕᚖgithubᚗcomᚋsonde
 	return ret
 }
 
+func (ec *executionContext) marshalNCompanniaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCompanniaNode(ctx context.Context, sel ast.SelectionSet, v *model.CompanniaNode) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CompanniaNode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCompanniaNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCompanniaNodeEdge(ctx context.Context, sel ast.SelectionSet, v []*model.CompanniaNodeEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOCompanniaNodeEdge2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCompanniaNodeEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalNDateTime2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -5303,6 +11713,79 @@ func (ec *executionContext) marshalNDateTime2string(ctx context.Context, sel ast
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNEmpresaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNode(ctx context.Context, sel ast.SelectionSet, v *model.EmpresaNode) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EmpresaNode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNEmpresaNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNodeConnection(ctx context.Context, sel ast.SelectionSet, v *model.EmpresaNodeConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EmpresaNodeConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNEmpresaNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNodeEdge(ctx context.Context, sel ast.SelectionSet, v []*model.EmpresaNodeEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOEmpresaNodeEdge2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNodeEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	res := graphql.MarshalFloatContext(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return graphql.WrapContextMarshaler(ctx, res)
 }
 
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
@@ -5335,6 +11818,16 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
+func (ec *executionContext) marshalNNomProductoNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐNomProductoNode(ctx context.Context, sel ast.SelectionSet, v *model.NomProductoNode) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._NomProductoNode(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagingᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *paging.PageInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -5343,6 +11836,112 @@ func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋnrftaᚋgoᚑpagi
 		return graphql.Null
 	}
 	return ec._PageInfo(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProductoNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNodeConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProductoNodeConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProductoNodeConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProductoNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNodeEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ProductoNodeEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOProductoNodeEdge2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNodeEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalNPropiedadProdNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdNodeConnection(ctx context.Context, sel ast.SelectionSet, v *model.PropiedadProdNodeConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PropiedadProdNodeConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPropiedadProdNodeEdge2ᚕᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdNodeEdge(ctx context.Context, sel ast.SelectionSet, v []*model.PropiedadProdNodeEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOPropiedadProdNodeEdge2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdNodeEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalNPropiedadProdTipo2githubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdTipo(ctx context.Context, v interface{}) (model.PropiedadProdTipo, error) {
+	var res model.PropiedadProdTipo
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPropiedadProdTipo2githubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdTipo(ctx context.Context, sel ast.SelectionSet, v model.PropiedadProdTipo) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -5637,6 +12236,14 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
+func (ec *executionContext) unmarshalOAllCategoriasInput2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐAllCategoriasInput(ctx context.Context, v interface{}) (*model.AllCategoriasInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputAllCategoriasInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -5684,6 +12291,74 @@ func (ec *executionContext) marshalOCategoriaNodeEdge2ᚖgithubᚗcomᚋsonderke
 	return ec._CategoriaNodeEdge(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOCompanniaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCompanniaNode(ctx context.Context, sel ast.SelectionSet, v *model.CompanniaNode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._CompanniaNode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOCompanniaNodeEdge2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐCompanniaNodeEdge(ctx context.Context, sel ast.SelectionSet, v *model.CompanniaNodeEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._CompanniaNodeEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOEmpresaNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNode(ctx context.Context, sel ast.SelectionSet, v *model.EmpresaNode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._EmpresaNode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOEmpresaNodeEdge2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaNodeEdge(ctx context.Context, sel ast.SelectionSet, v *model.EmpresaNodeEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._EmpresaNodeEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOEmpresaSetInput2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐEmpresaSetInput(ctx context.Context, v interface{}) (*model.EmpresaSetInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputEmpresaSetInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOID2ᚕᚖstring(ctx context.Context, v interface{}) ([]*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOID2ᚖstring(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOID2ᚕᚖstring(ctx context.Context, sel ast.SelectionSet, v []*string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalOID2ᚖstring(ctx, sel, v[i])
+	}
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
 	if v == nil {
 		return nil, nil
@@ -5722,6 +12397,49 @@ func (ec *executionContext) unmarshalOPageArgs2ᚖgithubᚗcomᚋnrftaᚋgoᚑpa
 	}
 	res, err := ec.unmarshalInputPageArgs(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOProductoInput2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoInput(ctx context.Context, v interface{}) (*model.ProductoInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputProductoInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOProductoNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNode(ctx context.Context, sel ast.SelectionSet, v *model.ProductoNode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ProductoNode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOProductoNodeConnection2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNodeConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProductoNodeConnection) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ProductoNodeConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOProductoNodeEdge2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐProductoNodeEdge(ctx context.Context, sel ast.SelectionSet, v *model.ProductoNodeEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ProductoNodeEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPropiedadProdNode2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdNode(ctx context.Context, sel ast.SelectionSet, v *model.PropiedadProdNode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PropiedadProdNode(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPropiedadProdNodeEdge2ᚖgithubᚗcomᚋsonderkevinᚋgqlᚋgraphᚋmodelᚐPropiedadProdNodeEdge(ctx context.Context, sel ast.SelectionSet, v *model.PropiedadProdNodeEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PropiedadProdNodeEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

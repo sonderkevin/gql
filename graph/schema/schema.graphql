@@ -1,0 +1,24 @@
+scalar DateTime
+
+type Query {
+  users(page: PageArgs): UserFriendsConnection!
+  categoria(id: ID!): CategoriaNode
+  categorias(page: PageArgs, input: AllCategoriasInput): CategoriaNodeConnection
+  producto(id: ID!): ProductoNode
+  productos(page: PageArgs, input: ProductoInput): ProductoNodeConnection
+}
+
+input PageArgs {
+  first: Int
+  last: Int
+  before: String
+  after: String
+}
+
+type PageInfo {
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+  totalCount: Int
+  startCursor: String
+  endCursor: String
+}

@@ -9,5 +9,6 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	CategoriaService *services.CategoriaService
+	CategoryService *services.CategoryService
+	ProductService  *services.ProductService
 }

@@ -1,0 +1,9 @@
+type TipoCategoriaNode {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  nombre: String!
+  abrev: String!
+  sub: String
+}

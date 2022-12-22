@@ -65,8 +65,13 @@ func setupServer(db *gorm.DB) *handler.Server {
 		generated.NewExecutableSchema(
 			generated.Config{
 				Resolvers: &graph.Resolver{
-					CategoriaService: &services.CategoriaService{
-						Repository: &repositories.CategoriaRepository{
+					CategoryService: &services.CategoryService{
+						Repository: &repositories.CategoryRepository{
+							DB: db,
+						},
+					},
+					ProductService: &services.ProductService{
+						Repository: &repositories.ProductRepository{
 							DB: db,
 						},
 					},

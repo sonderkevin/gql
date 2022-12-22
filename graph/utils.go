@@ -11,32 +11,32 @@ import (
 	db_model "github.com/sonderkevin/gql/model"
 )
 
-func ConvertCategoria(categoria db_model.Categoria) *model.CategoriaNode {
+func ConvertCategory(category *db_model.Category) *model.CategoriaNode {
 	var categoriaPadre *model.CategoriaNode
 
-	if categoria.CategoriaPadre == nil || categoria.CategoriaPadreID == 1 {
+	if category.CategoriaPadre == nil || category.CategoriaPadreID == 1 {
 		categoriaPadre = nil
 	} else {
-		categoriaPadre = ConvertCategoria(*categoria.CategoriaPadre)
+		categoriaPadre = ConvertCategory(category.CategoriaPadre)
 	}
 
 	var tipoCategoria *model.TipoCategoriaNode
-	if categoria.TipoCategoria == nil {
+	if category.TipoCategoria == nil {
 		tipoCategoria = nil
 	} else {
-		tipoCategoria = ConvertTipoCategoria(*categoria.TipoCategoria)
+		tipoCategoria = ConvertTipoCategoria(category.TipoCategoria)
 	}
 
 	result := &model.CategoriaNode{
-		ID:              encodeIntToBase64(categoria.ID, "kevinsecret"),
-		Estado:          categoria.Estado,
-		Fechacreado:     categoria.Fechacreado.String(),
-		Fechamodificado: categoria.Fechamodificado.String(),
-		Descripcion:     categoria.Descripcion,
-		ImageDefault:    categoria.ImageDefault,
-		Descuento:       int(categoria.Descuento),
-		CodigoPais:      &categoria.CodigoPais,
-		CodigoLetra:     &categoria.CodigoLetra,
+		ID:              EncodeIntToBase64(category.ID, "category"),
+		Estado:          category.Estado,
+		Fechacreado:     category.Fechacreado.String(),
+		Fechamodificado: category.Fechamodificado.String(),
+		Descripcion:     category.Descripcion,
+		ImageDefault:    category.ImageDefault,
+		Descuento:       category.Descuento,
+		CodigoPais:      &category.CodigoPais,
+		CodigoLetra:     &category.CodigoLetra,
 		CategoriaPadre:  categoriaPadre,
 		TipoCategoria:   tipoCategoria,
 	}
@@ -44,9 +44,9 @@ func ConvertCategoria(categoria db_model.Categoria) *model.CategoriaNode {
 	return result
 }
 
-func ConvertTipoCategoria(tipoCategoria db_model.TipoCategoria) *model.TipoCategoriaNode {
+func ConvertTipoCategoria(tipoCategoria *db_model.CategoryType) *model.TipoCategoriaNode {
 	result := &model.TipoCategoriaNode{
-		ID:              encodeIntToBase64(tipoCategoria.ID, "kevinsecret"),
+		ID:              EncodeIntToBase64(tipoCategoria.ID, "categoryType"),
 		Estado:          tipoCategoria.Estado,
 		Fechacreado:     tipoCategoria.Fechacreado.String(),
 		Fechamodificado: tipoCategoria.Fechacreado.String(),
@@ -57,7 +57,65 @@ func ConvertTipoCategoria(tipoCategoria db_model.TipoCategoria) *model.TipoCateg
 	return result
 }
 
-func encodeIntToBase64(n int32, secret string) string {
+func ConvertProduct(product *db_model.Product) *model.ProductoNode {
+	return &model.ProductoNode{
+		ID:                  EncodeIntToBase64(product.ID, "product"),
+		Estado:              product.Estado,
+		Fechacreado:         product.Fechacreado.String(),
+		Fechamodificado:     product.Fechamodificado.String(),
+		Usuariocrea:         &product.Usuariocrea,
+		Codigo:              &product.Codigo,
+		DescripcionCompleta: &product.DescripcionCompleta,
+		Preciocompra:        product.Preciocompra,
+		Precioventa:         product.Precioventa,
+		Cantidad:            product.Cantidad,
+		Lote:                product.Lote,
+		Visible:             product.Visible,
+		Descuento:           product.Descuento,
+		Latitud:             product.Latitud,
+		Longitud:            product.Longitud,
+		Destacado:           &product.Destacado,
+		Descripcion:         ConvertDescripcion(product.Descripcion),
+		Empresa:             ConvertEmpresa(product.Empresa),
+		Count:               nil,
+	}
+}
+
+func ConvertDescripcion(descripcion *db_model.CoreNomencladorproducto) *model.NomProductoNode {
+	return &model.NomProductoNode{
+		ID:              EncodeIntToBase64(descripcion.ID, "nomencladorProducto"),
+		Estado:          descripcion.Estado,
+		Fechacreado:     descripcion.Fechacreado.String(),
+		Fechamodificado: descripcion.Fechamodificado.String(),
+		Tipo:            descripcion.Tipo,
+		Descripcion:     descripcion.Descripcion,
+		Propiedades:     nil,
+		ProductoSet:     nil,
+	}
+}
+
+func ConvertEmpresa(empresa *db_model.CoreEmpresa) *model.EmpresaNode {
+	return &model.EmpresaNode{
+		ID:              EncodeIntToBase64(empresa.ID, "empresa"),
+		Estado:          empresa.Estado,
+		Fechacreado:     empresa.Fechacreado.String(),
+		Fechamodificado: empresa.Fechamodificado.String(),
+		Usuariocrea:     &empresa.Usuariocrea,
+		Compania:        nil,
+		Nombre:          empresa.Nombre,
+		Tarjeta:         empresa.Tarjeta,
+		APagar:          empresa.APagar,
+		Premium:         empresa.Estado,
+		Categoria:       nil,
+		Latitud:         empresa.Latitud,
+		Longitud:        empresa.Longitud,
+		Movil:           empresa.Movil,
+		Urlweb:          empresa.Urlweb,
+		Referencia:      &empresa.Referencia,
+	}
+}
+
+func EncodeIntToBase64(n int, secret string) string {
 	// Convert the int to a byte slice
 	b := make([]byte, 8)
 	binary.BigEndian.PutUint64(b, uint64(n))
@@ -71,7 +129,7 @@ func encodeIntToBase64(n int32, secret string) string {
 	return base64.StdEncoding.EncodeToString(sum)
 }
 
-func decodeBase64ToInt(s string, secret string) (int32, error) {
+func DecodeBase64ToInt(s string, secret string) (int, error) {
 	// Decode the base64 string to a byte slice
 	b, err := base64.StdEncoding.DecodeString(s)
 	if err != nil {
@@ -87,5 +145,5 @@ func decodeBase64ToInt(s string, secret string) (int32, error) {
 	}
 
 	// Convert the byte slice to an int and return it
-	return int32(binary.BigEndian.Uint64(b)), nil
+	return int(binary.BigEndian.Uint64(b)), nil
 }

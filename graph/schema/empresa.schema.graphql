@@ -1,0 +1,60 @@
+type EmpresaNode {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  usuariocrea: String
+  compania: CompanniaNode!
+  nombre: String!
+  tarjeta: String!
+  aPagar: Float!
+  premium: Boolean!
+#   barrio: BarrioNode!
+  categoria: CategoriaNode!
+  latitud: Float!
+  longitud: Float!
+  movil: Boolean!
+  urlweb: String!
+  referencia: String
+#   empresaFavorito: [XUserType!]!
+#   truequeSet(page: PageArgs): TruequeNodeConnection!
+#   productoSet(page: PageArgs, input: ProductoSetInput): ProductoNodeConnection!
+#   servicioSet(page: PageArgs, input: ServicioSetInput): ServicioNodeConnection!
+#   articleSet(page: PageArgs, input: ArticleSetInput): ArticleNodeConnection!
+#   personSet(page: PageArgs, input: PersonSetInput): PersonNodeConnection!
+#   images(page: PageArgs): ImageNodeConnection!
+#   facturaencSet(page: PageArgs): FacturaEncNodeConnection!
+#   comentarioempresaSet(page: PageArgs): ComentarioEmpresaNodeConnection!
+#   feriaEmp(page: PageArgs, nombre: String): FeriaNodeConnection!
+#   empresasConfig(page: PageArgs): ConfigAplicadaNodeConnection!
+#   count: Int
+}
+
+type EmpresaNodeConnection {
+  pageInfo: PageInfo!
+  edges: [EmpresaNodeEdge]!
+}
+
+type EmpresaNodeEdge {
+  cursor: String!
+  node: EmpresaNode
+}
+
+input ArticleSetInput {
+  title: String
+  title_Icontains: String
+  title_Istartswith: String
+  content: String
+  content_Icontains: String
+  business: ID
+  business_Nombre: String
+  business_Nombre_Icontains: String
+}
+
+input PersonSetInput {
+  firstName: String
+  firstName_Icontains: String
+  firstName_Istartswith: String
+  lastName: String
+  lastName_Icontains: String
+}

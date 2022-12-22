@@ -43,29 +43,74 @@ func (r *queryResolver) Users(ctx context.Context, page *paging.PageArgs) (*mode
 	panic(fmt.Errorf("not implemented: Users - users"))
 }
 
-// AllCategorias is the resolver for the allCategorias field.
-func (r *queryResolver) AllCategorias(ctx context.Context, before *string, after *string, first *int, last *int, descripcion *string, descripcionIcontains *string, tipoCategoriaNombre *string, tipoCategoriaNombreIcontains *string, tipoCategoriaAbrev *string, tipoCategoriaSub *string, tipoCategoriaID *string, categoriaPadreID *string, codigoPais *string, codigoLetra *string, id *string) (*model.CategoriaNodeConnection, error) {
-	dbCategories, err := r.CategoriaService.GetAllCategoria()
+// Categoria is the resolver for the categoria field.
+func (r *queryResolver) Categoria(ctx context.Context, id string) (*model.CategoriaNode, error) {
+	panic(fmt.Errorf("not implemented: Categoria - categoria"))
+}
+
+// Categorias is the resolver for the categorias field.
+func (r *queryResolver) Categorias(ctx context.Context, page *paging.PageArgs, input *model.AllCategoriasInput) (*model.CategoriaNodeConnection, error) {
+	dbCategories, err := r.CategoryService.GetAllCategory()
 	if err != nil {
 		return nil, err
 	}
 
 	totalCount := len(dbCategories)
 
-	paginator := paging.NewOffsetPaginator(&paging.PageArgs{First: first, After: after}, int64(totalCount))
+	paginator := paging.NewOffsetPaginator(page, int64(totalCount))
 
 	result := &model.CategoriaNodeConnection{
 		PageInfo: &paginator.PageInfo,
 	}
 
-	for i, categoria := range dbCategories {
+	for i, category := range dbCategories {
 		result.Edges = append(result.Edges, &model.CategoriaNodeEdge{
 			Cursor: *paging.EncodeOffsetCursor(paginator.Offset + i + 1),
-			Node:   ConvertCategoria(*categoria),
+			Node:   ConvertCategory(category),
 		})
 	}
 
 	return result, nil
+}
+
+// Producto is the resolver for the producto field.
+func (r *queryResolver) Producto(ctx context.Context, id string) (*model.ProductoNode, error) {
+	panic(fmt.Errorf("not implemented: Producto - producto"))
+}
+
+// Productos is the resolver for the productos field.
+func (r *queryResolver) Productos(ctx context.Context, page *paging.PageArgs, input *model.ProductoInput) (*model.ProductoNodeConnection, error) {
+	dbProducts, err := r.ProductService.GetAllProduct()
+	if err != nil {
+		return nil, err
+	}
+
+	totalCount := len(dbProducts)
+
+	paginator := paging.NewOffsetPaginator(page, int64(totalCount))
+
+	result := &model.ProductoNodeConnection{
+		PageInfo: &paginator.PageInfo,
+	}
+
+	for i, product := range dbProducts {
+		result.Edges = append(result.Edges, &model.ProductoNodeEdge{
+			Cursor: *paging.EncodeOffsetCursor(paginator.Offset + i + 1),
+			Node:   ConvertProduct(product),
+		})
+	}
+
+	return result, nil
+}
+
+// Last is the resolver for the last field.
+func (r *pageArgsResolver) Last(ctx context.Context, obj *paging.PageArgs, data *int) error {
+	panic(fmt.Errorf("not implemented: Last - last"))
+}
+
+// Before is the resolver for the before field.
+func (r *pageArgsResolver) Before(ctx context.Context, obj *paging.PageArgs, data *string) error {
+	panic(fmt.Errorf("not implemented: Before - before"))
 }
 
 // PageInfo returns generated.PageInfoResolver implementation.
@@ -74,5 +119,9 @@ func (r *Resolver) PageInfo() generated.PageInfoResolver { return &pageInfoResol
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+// PageArgs returns generated.PageArgsResolver implementation.
+func (r *Resolver) PageArgs() generated.PageArgsResolver { return &pageArgsResolver{r} }
+
 type pageInfoResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type pageArgsResolver struct{ *Resolver }

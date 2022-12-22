@@ -6,6 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.22
 	github.com/nrfta/go-paging v0.1.1
 	github.com/vektah/gqlparser/v2 v2.5.1
+	gorm.io/driver/postgres v1.4.5
 )
 
 require (
@@ -19,7 +20,6 @@ require (
 	github.com/jackc/pgx/v4 v4.17.2 // indirect
 	golang.org/x/crypto v0.0.0-20220826181053-bd7e27e6170d // indirect
 	golang.org/x/text v0.3.8 // indirect
-	gorm.io/driver/postgres v1.4.5 // indirect
 )
 
 require (
@@ -36,5 +36,5 @@ require (
 	github.com/volatiletech/sqlboiler/v4 v4.14.0 // indirect
 	github.com/volatiletech/strmangle v0.0.4 // indirect
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
-	gorm.io/gorm v1.24.2 // indirect
+	gorm.io/gorm v1.24.2
 )

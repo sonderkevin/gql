@@ -1,0 +1,37 @@
+type CategoriaNode {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  categoriaPadre: CategoriaNode
+  tipoCategoria: TipoCategoriaNode!
+  descripcion: String!
+  imageDefault: String!
+  descuento: Int!
+  codigoPais: String
+  codigoLetra: String
+}
+
+input AllCategoriasInput {
+  id: ID
+  descripcion: String
+  descripcionContains: String
+  tipoCategoriaNombre: String
+  tipoCategoriaNombreContains: String
+  tipoCategoriaAbrev: String
+  tipoCategoriaSub: String
+  tipoCategoriaId: ID
+  categoriaPadreId: ID
+  codigoPais: String
+  codigoLetra: String
+}
+
+type CategoriaNodeConnection {
+  pageInfo: PageInfo!
+  edges: [CategoriaNodeEdge]!
+}
+
+type CategoriaNodeEdge {
+  cursor: String!
+  node: CategoriaNode
+}
