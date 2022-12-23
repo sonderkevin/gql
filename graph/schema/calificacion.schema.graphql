@@ -1,0 +1,19 @@
+type Calificacion {
+  id: ID!
+  estado: Boolean!
+  fechacreado: DateTime!
+  fechamodificado: DateTime!
+  calificacion: Float!
+  usuario: User!
+  producto: Producto!
+}
+
+type CalificacionNodeConnection {
+  pageInfo: PageInfo!
+  edges: [CalificacionNodeEdge]
+}
+
+type CalificacionNodeEdge {
+  cursor: String!
+  node: Calificacion
+}

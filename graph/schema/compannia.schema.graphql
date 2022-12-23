@@ -1,14 +1,13 @@
-type CompanniaNode {
+type Compannia {
   id: ID!
   estado: Boolean!
-  fechacreado: DateTime!
-  fechamodificado: DateTime!
-  usuariocrea: String
+  fechaCreado: DateTime!
+  fechaModificado: DateTime!
+  usuarioCreador: User
   nombre: String!
-  pais: CategoriaNode!
-  empresaSet(page: PageArgs, input: EmpresaSetInput): EmpresaNodeConnection!
-#   xuserSet: [XUserType!]!
-  count: Int
+  pais: Categoria!
+  empresas(page: PageArgs, input: EmpresaInput): EmpresaNodeConnection!
+  usuarios(page: PageArgs): UserNodeConnection!
 }
 
 type CompanniaNodeConnection {
@@ -18,13 +17,5 @@ type CompanniaNodeConnection {
 
 type CompanniaNodeEdge {
   cursor: String!
-  node: CompanniaNode
-}
-
-input EmpresaSetInput {
-  id: ID
-  categoria_Id: ID
-  nombre: String
-  nombre_Icontains: String
-  nombre_Istartswith: String
+  node: Compannia
 }

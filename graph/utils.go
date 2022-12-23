@@ -11,8 +11,8 @@ import (
 	db_model "github.com/sonderkevin/gql/model"
 )
 
-func ConvertCategory(category *db_model.Category) *model.CategoriaNode {
-	var categoriaPadre *model.CategoriaNode
+func ConvertCategory(category *db_model.Category) *model.Categoria {
+	var categoriaPadre *model.Categoria
 
 	if category.CategoriaPadre == nil || category.CategoriaPadreID == 1 {
 		categoriaPadre = nil
@@ -20,18 +20,18 @@ func ConvertCategory(category *db_model.Category) *model.CategoriaNode {
 		categoriaPadre = ConvertCategory(category.CategoriaPadre)
 	}
 
-	var tipoCategoria *model.TipoCategoriaNode
+	var tipoCategoria *model.TipoCategoria
 	if category.TipoCategoria == nil {
 		tipoCategoria = nil
 	} else {
 		tipoCategoria = ConvertTipoCategoria(category.TipoCategoria)
 	}
 
-	result := &model.CategoriaNode{
+	result := &model.Categoria{
 		ID:              EncodeIntToBase64(category.ID, "category"),
 		Estado:          category.Estado,
-		Fechacreado:     category.Fechacreado.String(),
-		Fechamodificado: category.Fechamodificado.String(),
+		FechaCreado:     category.Fechacreado.String(),
+		FechaModificado: category.Fechamodificado.String(),
 		Descripcion:     category.Descripcion,
 		ImageDefault:    category.ImageDefault,
 		Descuento:       category.Descuento,
@@ -44,8 +44,8 @@ func ConvertCategory(category *db_model.Category) *model.CategoriaNode {
 	return result
 }
 
-func ConvertTipoCategoria(tipoCategoria *db_model.CategoryType) *model.TipoCategoriaNode {
-	result := &model.TipoCategoriaNode{
+func ConvertTipoCategoria(tipoCategoria *db_model.CategoryType) *model.TipoCategoria {
+	result := &model.TipoCategoria{
 		ID:              EncodeIntToBase64(tipoCategoria.ID, "categoryType"),
 		Estado:          tipoCategoria.Estado,
 		Fechacreado:     tipoCategoria.Fechacreado.String(),
@@ -57,17 +57,17 @@ func ConvertTipoCategoria(tipoCategoria *db_model.CategoryType) *model.TipoCateg
 	return result
 }
 
-func ConvertProduct(product *db_model.Product) *model.ProductoNode {
-	return &model.ProductoNode{
+func ConvertProduct(product *db_model.Product) *model.Producto {
+	return &model.Producto{
 		ID:                  EncodeIntToBase64(product.ID, "product"),
 		Estado:              product.Estado,
-		Fechacreado:         product.Fechacreado.String(),
-		Fechamodificado:     product.Fechamodificado.String(),
-		Usuariocrea:         &product.Usuariocrea,
+		FechaCreado:         product.Fechacreado.String(),
+		FechaModificado:     product.Fechamodificado.String(),
+		UsuarioCreador:      nil,
 		Codigo:              &product.Codigo,
 		DescripcionCompleta: &product.DescripcionCompleta,
-		Preciocompra:        product.Preciocompra,
-		Precioventa:         product.Precioventa,
+		PrecioCompra:        product.Preciocompra,
+		PrecioVenta:         product.Precioventa,
 		Cantidad:            product.Cantidad,
 		Lote:                product.Lote,
 		Visible:             product.Visible,
@@ -77,30 +77,29 @@ func ConvertProduct(product *db_model.Product) *model.ProductoNode {
 		Destacado:           &product.Destacado,
 		Descripcion:         ConvertDescripcion(product.Descripcion),
 		Empresa:             ConvertEmpresa(product.Empresa),
-		Count:               nil,
 	}
 }
 
-func ConvertDescripcion(descripcion *db_model.CoreNomencladorproducto) *model.NomProductoNode {
-	return &model.NomProductoNode{
+func ConvertDescripcion(descripcion *db_model.CoreNomencladorproducto) *model.NomencladorProducto {
+	return &model.NomencladorProducto{
 		ID:              EncodeIntToBase64(descripcion.ID, "nomencladorProducto"),
 		Estado:          descripcion.Estado,
-		Fechacreado:     descripcion.Fechacreado.String(),
-		Fechamodificado: descripcion.Fechamodificado.String(),
+		FechaCreado:     descripcion.Fechacreado.String(),
+		FechaModificado: descripcion.Fechamodificado.String(),
 		Tipo:            descripcion.Tipo,
 		Descripcion:     descripcion.Descripcion,
 		Propiedades:     nil,
-		ProductoSet:     nil,
+		Productos:       nil,
 	}
 }
 
-func ConvertEmpresa(empresa *db_model.CoreEmpresa) *model.EmpresaNode {
-	return &model.EmpresaNode{
+func ConvertEmpresa(empresa *db_model.CoreEmpresa) *model.Empresa {
+	return &model.Empresa{
 		ID:              EncodeIntToBase64(empresa.ID, "empresa"),
 		Estado:          empresa.Estado,
 		Fechacreado:     empresa.Fechacreado.String(),
 		Fechamodificado: empresa.Fechamodificado.String(),
-		Usuariocrea:     &empresa.Usuariocrea,
+		UsuarioCreador:  nil,
 		Compania:        nil,
 		Nombre:          empresa.Nombre,
 		Tarjeta:         empresa.Tarjeta,

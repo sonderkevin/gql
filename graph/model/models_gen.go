@@ -10,43 +10,47 @@ import (
 	"github.com/nrfta/go-paging"
 )
 
-type AllCategoriasInput struct {
-	ID                          *string `json:"id"`
-	Descripcion                 *string `json:"descripcion"`
-	DescripcionContains         *string `json:"descripcionContains"`
-	TipoCategoriaNombre         *string `json:"tipoCategoriaNombre"`
-	TipoCategoriaNombreContains *string `json:"tipoCategoriaNombreContains"`
-	TipoCategoriaAbrev          *string `json:"tipoCategoriaAbrev"`
-	TipoCategoriaSub            *string `json:"tipoCategoriaSub"`
-	TipoCategoriaID             *string `json:"tipoCategoriaId"`
-	CategoriaPadreID            *string `json:"categoriaPadreId"`
-	CodigoPais                  *string `json:"codigoPais"`
-	CodigoLetra                 *string `json:"codigoLetra"`
+type Calificacion struct {
+	ID              string    `json:"id"`
+	Estado          bool      `json:"estado"`
+	Fechacreado     string    `json:"fechacreado"`
+	Fechamodificado string    `json:"fechamodificado"`
+	Calificacion    float64   `json:"calificacion"`
+	Usuario         *User     `json:"usuario"`
+	Producto        *Producto `json:"producto"`
 }
 
-type ArticleSetInput struct {
-	Title                   *string `json:"title"`
-	TitleIcontains          *string `json:"title_Icontains"`
-	TitleIstartswith        *string `json:"title_Istartswith"`
-	Content                 *string `json:"content"`
-	ContentIcontains        *string `json:"content_Icontains"`
-	Business                *string `json:"business"`
-	BusinessNombre          *string `json:"business_Nombre"`
-	BusinessNombreIcontains *string `json:"business_Nombre_Icontains"`
+type CalificacionNodeConnection struct {
+	PageInfo *paging.PageInfo        `json:"pageInfo"`
+	Edges    []*CalificacionNodeEdge `json:"edges"`
 }
 
-type CategoriaNode struct {
-	ID              string             `json:"id"`
-	Estado          bool               `json:"estado"`
-	Fechacreado     string             `json:"fechacreado"`
-	Fechamodificado string             `json:"fechamodificado"`
-	CategoriaPadre  *CategoriaNode     `json:"categoriaPadre"`
-	TipoCategoria   *TipoCategoriaNode `json:"tipoCategoria"`
-	Descripcion     string             `json:"descripcion"`
-	ImageDefault    string             `json:"imageDefault"`
-	Descuento       int                `json:"descuento"`
-	CodigoPais      *string            `json:"codigoPais"`
-	CodigoLetra     *string            `json:"codigoLetra"`
+type CalificacionNodeEdge struct {
+	Cursor string        `json:"cursor"`
+	Node   *Calificacion `json:"node"`
+}
+
+type Categoria struct {
+	ID              string         `json:"id"`
+	Estado          bool           `json:"estado"`
+	FechaCreado     string         `json:"fechaCreado"`
+	FechaModificado string         `json:"fechaModificado"`
+	CategoriaPadre  *Categoria     `json:"categoriaPadre"`
+	TipoCategoria   *TipoCategoria `json:"tipoCategoria"`
+	Descripcion     string         `json:"descripcion"`
+	ImageDefault    string         `json:"imageDefault"`
+	Descuento       int            `json:"descuento"`
+	CodigoPais      *string        `json:"codigoPais"`
+	CodigoLetra     *string        `json:"codigoLetra"`
+}
+
+type CategoriaInput struct {
+	ID               *string `json:"id"`
+	Descripcion      *string `json:"descripcion"`
+	TipoCategoriaID  *string `json:"tipoCategoriaId"`
+	CategoriaPadreID *string `json:"categoriaPadreId"`
+	CodigoPais       *string `json:"codigoPais"`
+	CodigoLetra      *string `json:"codigoLetra"`
 }
 
 type CategoriaNodeConnection struct {
@@ -55,20 +59,40 @@ type CategoriaNodeConnection struct {
 }
 
 type CategoriaNodeEdge struct {
-	Cursor string         `json:"cursor"`
-	Node   *CategoriaNode `json:"node"`
+	Cursor string     `json:"cursor"`
+	Node   *Categoria `json:"node"`
 }
 
-type CompanniaNode struct {
+type Comentario struct {
+	ID              string    `json:"id"`
+	Estado          bool      `json:"estado"`
+	FechaCreado     string    `json:"fechaCreado"`
+	FechaModificado string    `json:"fechaModificado"`
+	Cliente         *User     `json:"cliente"`
+	Text            string    `json:"text"`
+	Producto        *Producto `json:"producto"`
+}
+
+type ComentarioNodeConnection struct {
+	PageInfo *paging.PageInfo      `json:"pageInfo"`
+	Edges    []*ComentarioNodeEdge `json:"edges"`
+}
+
+type ComentarioNodeEdge struct {
+	Cursor string      `json:"cursor"`
+	Node   *Comentario `json:"node"`
+}
+
+type Compannia struct {
 	ID              string                 `json:"id"`
 	Estado          bool                   `json:"estado"`
-	Fechacreado     string                 `json:"fechacreado"`
-	Fechamodificado string                 `json:"fechamodificado"`
-	Usuariocrea     *string                `json:"usuariocrea"`
+	FechaCreado     string                 `json:"fechaCreado"`
+	FechaModificado string                 `json:"fechaModificado"`
+	UsuarioCreador  *User                  `json:"usuarioCreador"`
 	Nombre          string                 `json:"nombre"`
-	Pais            *CategoriaNode         `json:"pais"`
-	EmpresaSet      *EmpresaNodeConnection `json:"empresaSet"`
-	Count           *int                   `json:"count"`
+	Pais            *Categoria             `json:"pais"`
+	Empresas        *EmpresaNodeConnection `json:"empresas"`
+	Usuarios        *UserNodeConnection    `json:"usuarios"`
 }
 
 type CompanniaNodeConnection struct {
@@ -77,27 +101,33 @@ type CompanniaNodeConnection struct {
 }
 
 type CompanniaNodeEdge struct {
-	Cursor string         `json:"cursor"`
-	Node   *CompanniaNode `json:"node"`
+	Cursor string     `json:"cursor"`
+	Node   *Compannia `json:"node"`
 }
 
-type EmpresaNode struct {
-	ID              string         `json:"id"`
-	Estado          bool           `json:"estado"`
-	Fechacreado     string         `json:"fechacreado"`
-	Fechamodificado string         `json:"fechamodificado"`
-	Usuariocrea     *string        `json:"usuariocrea"`
-	Compania        *CompanniaNode `json:"compania"`
-	Nombre          string         `json:"nombre"`
-	Tarjeta         string         `json:"tarjeta"`
-	APagar          float64        `json:"aPagar"`
-	Premium         bool           `json:"premium"`
-	Categoria       *CategoriaNode `json:"categoria"`
-	Latitud         float64        `json:"latitud"`
-	Longitud        float64        `json:"longitud"`
-	Movil           bool           `json:"movil"`
-	Urlweb          string         `json:"urlweb"`
-	Referencia      *string        `json:"referencia"`
+type Empresa struct {
+	ID              string     `json:"id"`
+	Estado          bool       `json:"estado"`
+	Fechacreado     string     `json:"fechacreado"`
+	Fechamodificado string     `json:"fechamodificado"`
+	UsuarioCreador  *User      `json:"usuarioCreador"`
+	Compania        *Compannia `json:"compania"`
+	Nombre          string     `json:"nombre"`
+	Tarjeta         string     `json:"tarjeta"`
+	APagar          float64    `json:"aPagar"`
+	Premium         bool       `json:"premium"`
+	Categoria       *Categoria `json:"categoria"`
+	Latitud         float64    `json:"latitud"`
+	Longitud        float64    `json:"longitud"`
+	Movil           bool       `json:"movil"`
+	Urlweb          string     `json:"urlweb"`
+	Referencia      *string    `json:"referencia"`
+}
+
+type EmpresaInput struct {
+	ID        *string `json:"id"`
+	Categoria *string `json:"categoria"`
+	Nombre    *string `json:"nombre"`
 }
 
 type EmpresaNodeConnection struct {
@@ -106,94 +136,64 @@ type EmpresaNodeConnection struct {
 }
 
 type EmpresaNodeEdge struct {
-	Cursor string       `json:"cursor"`
-	Node   *EmpresaNode `json:"node"`
+	Cursor string   `json:"cursor"`
+	Node   *Empresa `json:"node"`
 }
 
-type EmpresaSetInput struct {
-	ID                *string `json:"id"`
-	CategoriaID       *string `json:"categoria_Id"`
-	Nombre            *string `json:"nombre"`
-	NombreIcontains   *string `json:"nombre_Icontains"`
-	NombreIstartswith *string `json:"nombre_Istartswith"`
+type Marca struct {
+	ID              string                  `json:"id"`
+	Estado          bool                    `json:"estado"`
+	FechaCreado     string                  `json:"fechaCreado"`
+	FechaModificado string                  `json:"fechaModificado"`
+	UsuarioCreador  *User                   `json:"usuarioCreador"`
+	Descripcion     string                  `json:"descripcion"`
+	Productos       *ProductoNodeConnection `json:"productos"`
 }
 
-type NomProductoNode struct {
-	ID              string                       `json:"id"`
-	Estado          bool                         `json:"estado"`
-	Fechacreado     string                       `json:"fechacreado"`
-	Fechamodificado string                       `json:"fechamodificado"`
-	Tipo            string                       `json:"tipo"`
-	Descripcion     string                       `json:"descripcion"`
-	Propiedades     *PropiedadProdNodeConnection `json:"propiedades"`
-	ProductoSet     *ProductoNodeConnection      `json:"productoSet"`
+type NomencladorProducto struct {
+	ID              string                           `json:"id"`
+	Estado          bool                             `json:"estado"`
+	FechaCreado     string                           `json:"fechaCreado"`
+	FechaModificado string                           `json:"fechaModificado"`
+	Tipo            string                           `json:"tipo"`
+	Descripcion     string                           `json:"descripcion"`
+	Categoria       *Categoria                       `json:"categoria"`
+	Propiedades     *PropiedadProductoNodeConnection `json:"propiedades"`
+	Productos       *ProductoNodeConnection          `json:"productos"`
 }
 
-type PersonSetInput struct {
-	FirstName            *string `json:"firstName"`
-	FirstNameIcontains   *string `json:"firstName_Icontains"`
-	FirstNameIstartswith *string `json:"firstName_Istartswith"`
-	LastName             *string `json:"lastName"`
-	LastNameIcontains    *string `json:"lastName_Icontains"`
+type Producto struct {
+	ID                  string                           `json:"id"`
+	Estado              bool                             `json:"estado"`
+	FechaCreado         string                           `json:"fechaCreado"`
+	FechaModificado     string                           `json:"fechaModificado"`
+	UsuarioCreador      *User                            `json:"usuarioCreador"`
+	PrecioCompra        float64                          `json:"precioCompra"`
+	PrecioVenta         float64                          `json:"precioVenta"`
+	Cantidad            int                              `json:"cantidad"`
+	Descuento           int                              `json:"descuento"`
+	Lote                bool                             `json:"lote"`
+	Latitud             float64                          `json:"latitud"`
+	Longitud            float64                          `json:"longitud"`
+	Visible             bool                             `json:"visible"`
+	Descripcion         *NomencladorProducto             `json:"descripcion"`
+	DescripcionCompleta *string                          `json:"descripcionCompleta"`
+	Empresa             *Empresa                         `json:"empresa"`
+	Marca               *Marca                           `json:"marca"`
+	Codigo              *string                          `json:"codigo"`
+	Destacado           *int                             `json:"destacado"`
+	Usuarios            *UserNodeConnection              `json:"usuarios"`
+	Calificaciones      *CalificacionNodeConnection      `json:"calificaciones"`
+	PropiedadesValores  *PropiedadProductoNodeConnection `json:"propiedadesValores"`
+	Comentarios         *ComentarioNodeConnection        `json:"comentarios"`
 }
 
 type ProductoInput struct {
-	Destacado                                            *int    `json:"destacado"`
-	DestacadoIcontains                                   *int    `json:"destacado_Icontains"`
-	DescripcionDescripcion                               *string `json:"descripcion_Descripcion"`
-	DescripcionDescripcionIcontains                      *string `json:"descripcion_Descripcion_Icontains"`
-	DescripcionDescripcionIstartswith                    *string `json:"descripcion_Descripcion_Istartswith"`
-	DescripcionSubcategoriaDescripcion                   *string `json:"descripcion_Subcategoria_Descripcion"`
-	DescripcionSubcategoriaDescripcionIcontains          *string `json:"descripcion_Subcategoria_Descripcion_Icontains"`
-	DescripcionSubcategoriaCategoria                     *string `json:"descripcion_Subcategoria_Categoria"`
-	DescripcionSubcategoriaID                            *string `json:"descripcion_Subcategoria_Id"`
-	DescripcionSubcategoriaCategoriaDescripcion          *string `json:"descripcion_Subcategoria_Categoria_Descripcion"`
-	DescripcionSubcategoriaCategoriaDescripcionIcontains *string `json:"descripcion_Subcategoria_Categoria_Descripcion_Icontains"`
-	Marca                                                *string `json:"marca"`
-	MarcaDescripcion                                     *string `json:"marca_Descripcion"`
-	MarcaDescripcionIcontains                            *string `json:"marca_Descripcion_Icontains"`
-	Empresa                                              *string `json:"empresa"`
-	EmpresaNombre                                        *string `json:"empresa_Nombre"`
-	EmpresaNombreIcontains                               *string `json:"empresa_Nombre_Icontains"`
-}
-
-type ProductoMSetInput struct {
-	SeccionCategoriaID                        *string   `json:"seccion_Categoria_Id"`
-	SeccionCategoriaIDIcontains               *string   `json:"seccion_Categoria_Id_Icontains"`
-	SeccionCategoriaIDIstartswith             *string   `json:"seccion_Categoria_Id_Istartswith"`
-	SeccionCategoriaDescripcion               *string   `json:"seccion_Categoria_Descripcion"`
-	SeccionCategoriaDescripcionIcontains      *string   `json:"seccion_Categoria_Descripcion_Icontains"`
-	PresentacionCategoria                     []*string `json:"presentacion_Categoria"`
-	PresentacionCategoriaDescripcion          *string   `json:"presentacion_Categoria_Descripcion"`
-	PresentacionCategoriaDescripcionIcontains *string   `json:"presentacion_Categoria_Descripcion_Icontains"`
-	TipopesoCategoria                         []*string `json:"tipopeso_Categoria"`
-	TipopesoCategoriaDescripcion              *string   `json:"tipopeso_Categoria_Descripcion"`
-	TipopesoCategoriaDescripcionIcontains     *string   `json:"tipopeso_Categoria_Descripcion_Icontains"`
-	ProductoDescripcion                       *string   `json:"producto_Descripcion"`
-	ProductoDescripcionIcontains              *string   `json:"producto_Descripcion_Icontains"`
-	ProductoDescripcionIstartswith            *string   `json:"producto_Descripcion_Istartswith"`
-}
-
-type ProductoNode struct {
-	ID                  string           `json:"id"`
-	Estado              bool             `json:"estado"`
-	Fechacreado         string           `json:"fechacreado"`
-	Fechamodificado     string           `json:"fechamodificado"`
-	Usuariocrea         *string          `json:"usuariocrea"`
-	Codigo              *string          `json:"codigo"`
-	DescripcionCompleta *string          `json:"descripcionCompleta"`
-	Preciocompra        float64          `json:"preciocompra"`
-	Precioventa         float64          `json:"precioventa"`
-	Cantidad            int              `json:"cantidad"`
-	Lote                bool             `json:"lote"`
-	Visible             bool             `json:"visible"`
-	Descuento           int              `json:"descuento"`
-	Latitud             float64          `json:"latitud"`
-	Longitud            float64          `json:"longitud"`
-	Destacado           *int             `json:"destacado"`
-	Descripcion         *NomProductoNode `json:"descripcion"`
-	Empresa             *EmpresaNode     `json:"empresa"`
-	Count               *int             `json:"count"`
+	Descripcion *string `json:"descripcion"`
+	Categoria   *string `json:"categoria"`
+	Empresa     *string `json:"empresa"`
+	Marca       *string `json:"marca"`
+	Destacado   *int    `json:"destacado"`
 }
 
 type ProductoNodeConnection struct {
@@ -202,48 +202,31 @@ type ProductoNodeConnection struct {
 }
 
 type ProductoNodeEdge struct {
-	Cursor string        `json:"cursor"`
-	Node   *ProductoNode `json:"node"`
+	Cursor string    `json:"cursor"`
+	Node   *Producto `json:"node"`
 }
 
-type PropiedadProdNode struct {
-	ID              string            `json:"id"`
-	Estado          bool              `json:"estado"`
-	Fechacreado     string            `json:"fechacreado"`
-	Fechamodificado string            `json:"fechamodificado"`
-	Usuariocrea     *string           `json:"usuariocrea"`
-	Tipo            PropiedadProdTipo `json:"tipo"`
-	Descripcion     string            `json:"descripcion"`
+type PropiedadProducto struct {
+	ID              string                `json:"id"`
+	Estado          bool                  `json:"estado"`
+	FechaCreado     string                `json:"fechaCreado"`
+	FechaModificado string                `json:"fechaModificado"`
+	UsuarioCreador  *string               `json:"usuarioCreador"`
+	Tipo            PropiedadProductoTipo `json:"tipo"`
+	Descripcion     string                `json:"descripcion"`
 }
 
-type PropiedadProdNodeConnection struct {
-	PageInfo *paging.PageInfo         `json:"pageInfo"`
-	Edges    []*PropiedadProdNodeEdge `json:"edges"`
+type PropiedadProductoNodeConnection struct {
+	PageInfo *paging.PageInfo             `json:"pageInfo"`
+	Edges    []*PropiedadProductoNodeEdge `json:"edges"`
 }
 
-type PropiedadProdNodeEdge struct {
+type PropiedadProductoNodeEdge struct {
 	Cursor string             `json:"cursor"`
-	Node   *PropiedadProdNode `json:"node"`
+	Node   *PropiedadProducto `json:"node"`
 }
 
-type ServicioSetInput struct {
-	Destacado                                            *int    `json:"destacado"`
-	DestacadoIcontains                                   *int    `json:"destacado_Icontains"`
-	DescripcionDescripcion                               *string `json:"descripcion_Descripcion"`
-	DescripcionDescripcionIcontains                      *string `json:"descripcion_Descripcion_Icontains"`
-	DescripcionDescripcionIstartswith                    *string `json:"descripcion_Descripcion_Istartswith"`
-	DescripcionSubcategoriaID                            *string `json:"descripcion_Subcategoria_Id"`
-	DescripcionSubcategoriaDescripcion                   *string `json:"descripcion_Subcategoria_Descripcion"`
-	DescripcionSubcategoriaDescripcionIcontains          *string `json:"descripcion_Subcategoria_Descripcion_Icontains"`
-	DescripcionSubcategoriaCategoria                     *string `json:"descripcion_Subcategoria_Categoria"`
-	DescripcionSubcategoriaCategoriaDescripcion          *string `json:"descripcion_Subcategoria_Categoria_Descripcion"`
-	DescripcionSubcategoriaCategoriaDescripcionIcontains *string `json:"descripcion_Subcategoria_Categoria_Descripcion_Icontains"`
-	Empresa                                              *string `json:"empresa"`
-	EmpresaNombre                                        *string `json:"empresa_Nombre"`
-	EmpresaNombreIcontains                               *string `json:"empresa_Nombre_Icontains"`
-}
-
-type TipoCategoriaNode struct {
+type TipoCategoria struct {
 	ID              string  `json:"id"`
 	Estado          bool    `json:"estado"`
 	Fechacreado     string  `json:"fechacreado"`
@@ -254,58 +237,58 @@ type TipoCategoriaNode struct {
 }
 
 type User struct {
-	ID                string                 `json:"id"`
-	Name              string                 `json:"name"`
-	FriendsConnection *UserFriendsConnection `json:"friendsConnection"`
+	ID        string `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
 }
 
-type UserFriendsConnection struct {
-	PageInfo *paging.PageInfo   `json:"pageInfo"`
-	Edges    []*UserFriendsEdge `json:"edges"`
+type UserNodeConnection struct {
+	PageInfo *paging.PageInfo `json:"pageInfo"`
+	Edges    []*UserNodeEdge  `json:"edges"`
 }
 
-type UserFriendsEdge struct {
+type UserNodeEdge struct {
 	Cursor string `json:"cursor"`
 	Node   *User  `json:"node"`
 }
 
-type PropiedadProdTipo string
+type PropiedadProductoTipo string
 
 const (
-	PropiedadProdTipoProducto PropiedadProdTipo = "PRODUCTO"
-	PropiedadProdTipoServicio PropiedadProdTipo = "SERVICIO"
+	PropiedadProductoTipoProducto PropiedadProductoTipo = "PRODUCTO"
+	PropiedadProductoTipoServicio PropiedadProductoTipo = "SERVICIO"
 )
 
-var AllPropiedadProdTipo = []PropiedadProdTipo{
-	PropiedadProdTipoProducto,
-	PropiedadProdTipoServicio,
+var AllPropiedadProductoTipo = []PropiedadProductoTipo{
+	PropiedadProductoTipoProducto,
+	PropiedadProductoTipoServicio,
 }
 
-func (e PropiedadProdTipo) IsValid() bool {
+func (e PropiedadProductoTipo) IsValid() bool {
 	switch e {
-	case PropiedadProdTipoProducto, PropiedadProdTipoServicio:
+	case PropiedadProductoTipoProducto, PropiedadProductoTipoServicio:
 		return true
 	}
 	return false
 }
 
-func (e PropiedadProdTipo) String() string {
+func (e PropiedadProductoTipo) String() string {
 	return string(e)
 }
 
-func (e *PropiedadProdTipo) UnmarshalGQL(v interface{}) error {
+func (e *PropiedadProductoTipo) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
 	}
 
-	*e = PropiedadProdTipo(str)
+	*e = PropiedadProductoTipo(str)
 	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid PropiedadProdTipo", str)
+		return fmt.Errorf("%s is not a valid PropiedadProductoTipo", str)
 	}
 	return nil
 }
 
-func (e PropiedadProdTipo) MarshalGQL(w io.Writer) {
+func (e PropiedadProductoTipo) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

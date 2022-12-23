@@ -1,0 +1,19 @@
+type Comentario {
+  id: ID!
+  estado: Boolean!
+  fechaCreado: DateTime!
+  fechaModificado: DateTime!
+  cliente: User!
+  text: String!
+  producto: Producto!
+}
+
+type ComentarioNodeConnection {
+  pageInfo: PageInfo!
+  edges: [ComentarioNodeEdge]
+}
+
+type ComentarioNodeEdge {
+  cursor: String!
+  node: Comentario
+}

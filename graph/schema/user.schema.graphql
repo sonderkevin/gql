@@ -1,15 +1,15 @@
 type User {
   id: ID!
-  name: String!
-  friendsConnection: UserFriendsConnection
+  firstName: String!
+  lastName: String!
 }
 
-type UserFriendsConnection {
+type UserNodeConnection {
   pageInfo: PageInfo!
-  edges: [UserFriendsEdge]
+  edges: [UserNodeEdge]
 }
 
-type UserFriendsEdge {
+type UserNodeEdge {
   cursor: String!
   node: User
 }

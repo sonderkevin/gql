@@ -1,4 +1,4 @@
-type TipoCategoriaNode {
+type TipoCategoria {
   id: ID!
   estado: Boolean!
   fechacreado: DateTime!

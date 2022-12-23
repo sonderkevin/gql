@@ -1,10 +1,10 @@
 scalar DateTime
 
 type Query {
-  users(page: PageArgs): UserFriendsConnection!
-  categoria(id: ID!): CategoriaNode
-  categorias(page: PageArgs, input: AllCategoriasInput): CategoriaNodeConnection
-  producto(id: ID!): ProductoNode
+  users(page: PageArgs): UserNodeConnection!
+  categoria(id: ID!): Categoria
+  categorias(page: PageArgs, input: CategoriaInput): CategoriaNodeConnection
+  producto(id: ID!): Producto
   productos(page: PageArgs, input: ProductoInput): ProductoNodeConnection
 }
 

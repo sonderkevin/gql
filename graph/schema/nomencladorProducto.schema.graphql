@@ -1,0 +1,11 @@
+type NomencladorProducto {
+  id: ID!
+  estado: Boolean!
+  fechaCreado: DateTime!
+  fechaModificado: DateTime!
+  tipo: String!
+  descripcion: String!
+  categoria: Categoria
+  propiedades(page: PageArgs): PropiedadProductoNodeConnection!
+  productos(page: PageArgs, input: ProductoInput): ProductoNodeConnection!
+}

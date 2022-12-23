@@ -1,35 +1,34 @@
-type ProductoNode {
+type Producto {
   id: ID!
   estado: Boolean!
-  fechacreado: DateTime!
-  fechamodificado: DateTime!
-  usuariocrea: String
-  codigo: String
-  descripcionCompleta: String
-  preciocompra: Float!
-  precioventa: Float!
+  fechaCreado: DateTime!
+  fechaModificado: DateTime!
+
+  usuarioCreador: User!
+  precioCompra: Float!
+  precioVenta: Float!
   cantidad: Int!
-  lote: Boolean!
-  visible: Boolean!
   descuento: Int!
+  lote: Boolean!
   latitud: Float!
   longitud: Float!
+  visible: Boolean!
+  
+  descripcion: NomencladorProducto!
+  descripcionCompleta: String
+
+  empresa: Empresa!
+  marca: Marca
+  
+  codigo: String
   destacado: Int
 
-  descripcion: NomProductoNode!
-  empresa: EmpresaNode!
-  # marca: MarcaNode
+  usuarios: UserNodeConnection!
+  calificaciones: CalificacionNodeConnection!
 
-  # usuariosProd: [XUserType!]!
-  # calificacionSet: [CalificacionNode!]!
-
-  #   propvalores(page: PageArgs): PropiedadProdValorNodeConnection!
-  #   prodOfrecidos(page: PageArgs): TruequeNodeConnection!
-  #   truequeSet(page: PageArgs): TruequeNodeConnection!
-  #   images(page: PageArgs): ImageNodeConnection!
-  #   comentarioSet(page: PageArgs): ComentarioNodeConnection!
-
-  count: Int
+  propiedadesValores(page: PageArgs): PropiedadProductoNodeConnection!
+  # imagenes(page: PageArgs): ImagenNodeConnection!
+  comentarios(page: PageArgs): ComentarioNodeConnection!
 }
 
 type ProductoNodeConnection {
@@ -39,104 +38,13 @@ type ProductoNodeConnection {
 
 type ProductoNodeEdge {
   cursor: String!
-  node: ProductoNode
-}
-
-type NomProductoNode {
-  id: ID!
-  estado: Boolean!
-  fechacreado: DateTime!
-  fechamodificado: DateTime!
-  tipo: String!
-  descripcion: String!
-  # subcategoria: SubCategoriaNode
-  propiedades(page: PageArgs): PropiedadProdNodeConnection!
-  productoSet(page: PageArgs, input: ProductoInput): ProductoNodeConnection!
-  #   servicioSet(page: PageArgs, input: ServicioSetInput): ServicioNodeConnection!
-  #   productomSet(
-  #     page: PageArgs,
-  #     input: ProductoMSetInput
-  #   ): ProductomNodeConnection!
-}
-
-type PropiedadProdNode {
-  id: ID!
-  estado: Boolean!
-  fechacreado: DateTime!
-  fechamodificado: DateTime!
-  usuariocrea: String
-  tipo: PropiedadProdTipo!
-  descripcion: String!
-  # subcategorias(page: PageArgs, descripcion: String, descripcion_Icontains: String): SubCategoriaNodeConnection!
-  # propiedadprodvalorSet(page: PageArgs): PropiedadProdValorNodeConnection!
-  # nomencladorproductoSet(page: PageArgs, descripcion: String, descripcion_Icontains: String, subcategoria: ID, subcategoria_Descripcion: String, subcategoria_Descripcion_Icontains: String, tipo: String): NomProductoNodeConnection!
-}
-
-type PropiedadProdNodeConnection {
-  pageInfo: PageInfo!
-  edges: [PropiedadProdNodeEdge]!
-}
-
-type PropiedadProdNodeEdge {
-  cursor: String!
-  node: PropiedadProdNode
-}
-
-enum PropiedadProdTipo {
-  PRODUCTO
-  SERVICIO
+  node: Producto
 }
 
 input ProductoInput {
-  destacado: Int
-  destacado_Icontains: Int
-  descripcion_Descripcion: String
-  descripcion_Descripcion_Icontains: String
-  descripcion_Descripcion_Istartswith: String
-  descripcion_Subcategoria_Descripcion: String
-  descripcion_Subcategoria_Descripcion_Icontains: String
-  descripcion_Subcategoria_Categoria: ID
-  descripcion_Subcategoria_Id: ID
-  descripcion_Subcategoria_Categoria_Descripcion: String
-  descripcion_Subcategoria_Categoria_Descripcion_Icontains: String
+  descripcion: String
+  categoria: ID
+  empresa: ID
   marca: ID
-  marca_Descripcion: String
-  marca_Descripcion_Icontains: String
-  empresa: ID
-  empresa_Nombre: String
-  empresa_Nombre_Icontains: String
-}
-
-input ProductoMSetInput {
-  seccion_Categoria_Id: ID
-  seccion_Categoria_Id_Icontains: ID
-  seccion_Categoria_Id_Istartswith: ID
-  seccion_Categoria_Descripcion: String
-  seccion_Categoria_Descripcion_Icontains: String
-  presentacion_Categoria: [ID]
-  presentacion_Categoria_Descripcion: String
-  presentacion_Categoria_Descripcion_Icontains: String
-  tipopeso_Categoria: [ID]
-  tipopeso_Categoria_Descripcion: String
-  tipopeso_Categoria_Descripcion_Icontains: String
-  producto_Descripcion: String
-  producto_Descripcion_Icontains: String
-  producto_Descripcion_Istartswith: String
-}
-
-input ServicioSetInput {
   destacado: Int
-  destacado_Icontains: Int
-  descripcion_Descripcion: String
-  descripcion_Descripcion_Icontains: String
-  descripcion_Descripcion_Istartswith: String
-  descripcion_Subcategoria_Id: ID
-  descripcion_Subcategoria_Descripcion: String
-  descripcion_Subcategoria_Descripcion_Icontains: String
-  descripcion_Subcategoria_Categoria: ID
-  descripcion_Subcategoria_Categoria_Descripcion: String
-  descripcion_Subcategoria_Categoria_Descripcion_Icontains: String
-  empresa: ID
-  empresa_Nombre: String
-  empresa_Nombre_Icontains: String
 }

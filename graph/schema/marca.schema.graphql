@@ -1,0 +1,9 @@
+type Marca {
+  id: ID!
+  estado: Boolean!
+  fechaCreado: DateTime!
+  fechaModificado: DateTime!
+  usuarioCreador: User
+  descripcion: String!
+  productos(page: PageArgs, input: ProductoInput): ProductoNodeConnection!
+}

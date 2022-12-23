@@ -1,0 +1,28 @@
+type PropiedadProducto {
+  id: ID!
+  estado: Boolean!
+  fechaCreado: DateTime!
+  fechaModificado: DateTime!
+
+  usuarioCreador: User
+  tipo: PropiedadProductoTipo!
+  descripcion: String!
+  # categorias(page: PageArgs, descripcion: String, descripcion_Icontains: String): SubCategoriaNodeConnection!
+  # propiedadprodvalorSet(page: PageArgs): PropiedadProdValorNodeConnection!
+  # nomencladorproductoSet(page: PageArgs, descripcion: String, descripcion_Icontains: String, subcategoria: ID, subcategoria_Descripcion: String, subcategoria_Descripcion_Icontains: String, tipo: String): NomProductoNodeConnection!
+}
+
+type PropiedadProductoNodeConnection {
+  pageInfo: PageInfo!
+  edges: [PropiedadProductoNodeEdge]!
+}
+
+type PropiedadProductoNodeEdge {
+  cursor: String!
+  node: PropiedadProducto
+}
+
+enum PropiedadProductoTipo {
+  PRODUCTO
+  SERVICIO
+}

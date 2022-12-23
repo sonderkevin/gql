@@ -1,10 +1,10 @@
-type CategoriaNode {
+type Categoria {
   id: ID!
   estado: Boolean!
-  fechacreado: DateTime!
-  fechamodificado: DateTime!
-  categoriaPadre: CategoriaNode
-  tipoCategoria: TipoCategoriaNode!
+  fechaCreado: DateTime!
+  fechaModificado: DateTime!
+  categoriaPadre: Categoria
+  tipoCategoria: TipoCategoria!
   descripcion: String!
   imageDefault: String!
   descuento: Int!
@@ -12,14 +12,9 @@ type CategoriaNode {
   codigoLetra: String
 }
 
-input AllCategoriasInput {
+input CategoriaInput {
   id: ID
   descripcion: String
-  descripcionContains: String
-  tipoCategoriaNombre: String
-  tipoCategoriaNombreContains: String
-  tipoCategoriaAbrev: String
-  tipoCategoriaSub: String
   tipoCategoriaId: ID
   categoriaPadreId: ID
   codigoPais: String
@@ -33,5 +28,5 @@ type CategoriaNodeConnection {
 
 type CategoriaNodeEdge {
   cursor: String!
-  node: CategoriaNode
+  node: Categoria
 }

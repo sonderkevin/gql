@@ -1,23 +1,22 @@
-type EmpresaNode {
+type Empresa {
   id: ID!
   estado: Boolean!
   fechacreado: DateTime!
   fechamodificado: DateTime!
-  usuariocrea: String
-  compania: CompanniaNode!
+  usuarioCreador: User
+  compania: Compannia!
   nombre: String!
   tarjeta: String!
   aPagar: Float!
   premium: Boolean!
 #   barrio: BarrioNode!
-  categoria: CategoriaNode!
+  categoria: Categoria!
   latitud: Float!
   longitud: Float!
   movil: Boolean!
   urlweb: String!
   referencia: String
 #   empresaFavorito: [XUserType!]!
-#   truequeSet(page: PageArgs): TruequeNodeConnection!
 #   productoSet(page: PageArgs, input: ProductoSetInput): ProductoNodeConnection!
 #   servicioSet(page: PageArgs, input: ServicioSetInput): ServicioNodeConnection!
 #   articleSet(page: PageArgs, input: ArticleSetInput): ArticleNodeConnection!
@@ -37,24 +36,22 @@ type EmpresaNodeConnection {
 
 type EmpresaNodeEdge {
   cursor: String!
-  node: EmpresaNode
+  node: Empresa
 }
 
-input ArticleSetInput {
-  title: String
-  title_Icontains: String
-  title_Istartswith: String
-  content: String
-  content_Icontains: String
-  business: ID
-  business_Nombre: String
-  business_Nombre_Icontains: String
+input EmpresaInput {
+  id: ID
+  categoria: ID
+  nombre: String
 }
 
-input PersonSetInput {
-  firstName: String
-  firstName_Icontains: String
-  firstName_Istartswith: String
-  lastName: String
-  lastName_Icontains: String
-}
+# input ArticleInput {
+#   title: String
+#   content: String
+#   business: ID
+# }
+
+# input PersonInput {
+#   firstName: String
+#   lastName: String
+# }

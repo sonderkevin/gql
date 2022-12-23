@@ -39,17 +39,17 @@ func (r *pageInfoResolver) EndCursor(ctx context.Context, obj *paging.PageInfo) 
 }
 
 // Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context, page *paging.PageArgs) (*model.UserFriendsConnection, error) {
+func (r *queryResolver) Users(ctx context.Context, page *paging.PageArgs) (*model.UserNodeConnection, error) {
 	panic(fmt.Errorf("not implemented: Users - users"))
 }
 
 // Categoria is the resolver for the categoria field.
-func (r *queryResolver) Categoria(ctx context.Context, id string) (*model.CategoriaNode, error) {
+func (r *queryResolver) Categoria(ctx context.Context, id string) (*model.Categoria, error) {
 	panic(fmt.Errorf("not implemented: Categoria - categoria"))
 }
 
 // Categorias is the resolver for the categorias field.
-func (r *queryResolver) Categorias(ctx context.Context, page *paging.PageArgs, input *model.AllCategoriasInput) (*model.CategoriaNodeConnection, error) {
+func (r *queryResolver) Categorias(ctx context.Context, page *paging.PageArgs, input *model.CategoriaInput) (*model.CategoriaNodeConnection, error) {
 	dbCategories, err := r.CategoryService.GetAllCategory()
 	if err != nil {
 		return nil, err
@@ -74,8 +74,19 @@ func (r *queryResolver) Categorias(ctx context.Context, page *paging.PageArgs, i
 }
 
 // Producto is the resolver for the producto field.
-func (r *queryResolver) Producto(ctx context.Context, id string) (*model.ProductoNode, error) {
-	panic(fmt.Errorf("not implemented: Producto - producto"))
+func (r *queryResolver) Producto(ctx context.Context, id string) (*model.Producto, error) {
+	decodedId, err := DecodeBase64ToInt(id, "product")
+	if err != nil {
+		return nil, err
+	}
+
+	dbProduct, err := r.ProductService.GetById(decodedId)
+	if err != nil {
+		return nil, err
+	}
+
+	return ConvertProduct(dbProduct), nil
+
 }
 
 // Productos is the resolver for the productos field.
